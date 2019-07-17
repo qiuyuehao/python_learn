@@ -60,12 +60,14 @@ class MyWidgets(QWidget):
 							self.__ui.label_23.setText(up_down_value)
 							self.__ui.label_26.setText(value)
 	def get_stock_info(self,num_retries=2):
-		stock_no = self.__ui.lineEdit.text()
+		#stock_no = self.__ui.lineEdit.text()
+		stock_no = '000002'
 		try: 
 			url = 'http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx?type=CT&cmd='+stock_no.strip()+'2&sty=CTBF&st=z&sr=&p=&ps=&cb=var%20pie_data=&js=(x)&token=28758b27a75f62dc3065b81f7facb365&_=1496312544427' 
 			headers = {'User-agent':'WSWP'} 
 			#request = urllib.Request(url,headers=headers) 
 			page = urllib.request.urlopen(url) 
+			print(url)
 			page_content = page.read() 
 		except urllib.request.URLError as e: 
 			print('download error:',e.reason) 
@@ -82,14 +84,14 @@ class MyWidgets(QWidget):
 		self._update()
 	def _set_count(self):
 		self.start_get_info()
-		#stock_info = self.get_stock_info()
-		#if stock_info is not None:
-			#stock_info = str(stock_info)
-			#stock_info = stock_info.split(",")
-			#print(stock_info)
-			#stock_value = stock_info[4]
-			#print(stock_value)
-			#stock_info = stock_info[14:64]
+		stock_info = self.get_stock_info()
+		if stock_info is not None:
+			stock_info = str(stock_info)
+			stock_info = stock_info.split(",")
+			print(stock_info)
+			stock_value = stock_info[4]
+			print(stock_value)
+			stock_info = stock_info[14:64]
 		#self.__ui.label.setText(stock_value)
 if __name__=='__main__':
 	app=QApplication(sys.argv)

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>826</width>
+    <width>778</width>
     <height>851</height>
    </rect>
   </property>
@@ -436,7 +436,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>start</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_2">
@@ -449,7 +449,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>stop</string>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -517,13 +517,43 @@
      <string>TextLabel</string>
     </property>
    </widget>
+   <widget class="QLineEdit" name="lineEdit_11">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>150</y>
+      <width>51</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_12">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>150</y>
+      <width>51</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_13">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>150</y>
+      <width>51</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>826</width>
+     <width>778</width>
      <height>22</height>
     </rect>
    </property>
