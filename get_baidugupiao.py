@@ -15,14 +15,25 @@ def get_baidugupiao(stock_num):
 		url_addr = url + "sz" + stock_num + ".html"
 	if stock_num.startswith("6"):
 		url_addr = url + "sh" + stock_num + ".html"
-	r = requests.get(url_addr, headers={
-		'User-Agent': UserAgent().random,
-	})
-	print(url_addr)
+	try:
+		r = requests.get(url_addr, headers={
+			'User-Agent': UserAgent().random
+		}, timeout = 20)
+	except requests.exceptions.ConnectionError:
+		print('ConnectionError')
+		return None
+	except requests.exceptions.ChunkedEncodingError:
+		print('ChunkedEncodingError')
+		return None
+	except:
+		print('Unfortunitely -- An Unknow Error Happened')
+		return None
 	r.encoding = r.apparent_encoding
 	return r.text
 def get_gupiao_info(stock_num):
 	html=get_baidugupiao(stock_num)
+	if html == None:
+		return None
 	soup = BeautifulSoup(html, 'html.parser')
 	result=soup.find("div", attrs={"class":"stock-info","data-spm":"2"})
 	if result == None:
