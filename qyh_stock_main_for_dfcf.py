@@ -103,9 +103,11 @@ class MyWidgets(QWidget):
 						prePrice = float(prePrice)
 						price = float(price)
 						if price - prePrice > 0:
+							up_down_percent_num = str((price -prePrice) / prePrice * 100 + 0.005)[0:4]
 							up_down_percent = str((price -prePrice) / prePrice * 100 + 0.005)[0:4] + '%'
 							up_down_value = str(price - prePrice + 0.005)[0:4]
 						else:
+							up_down_percent_num = up_down_percent = str((price -prePrice) / prePrice * 100 - 0.005)[0:5]
 							up_down_percent = str((price -prePrice) / prePrice * 100 - 0.005)[0:5] + '%'
 							up_down_value = str(price - prePrice - 0.005)[0:5]
 						value = str(price)
@@ -166,7 +168,7 @@ class MyWidgets(QWidget):
 								continue
 
 						if should_notify == "1":
-							float_up_down = float(up_down_percent)
+							float_up_down = float(up_down_percent_num)
 							if abs(float_up_down) > abs(limit):
 								if float_up_down > 0:
 									if (number_mail_send[number - 1] == 0):
