@@ -39,25 +39,29 @@ class MyWidgets(QWidget):
 				(prePrice, price, time) = return_value
 				prePrice = float(prePrice)
 				price = float(price)
+				if price - prePrice > 0:
+					up_down_percent = str((price -prePrice) / prePrice * 100 + 0.005)[0:4]	
+				else:	
+					up_down_percent = str((price -prePrice) / prePrice * 100 - 0.005)[0:5]
 
-				up_down_percent = str((price -prePrice) / prePrice * 100)[0:6]
 				up_down_value = str(price - prePrice)
 				value = str(price)
-				
+
+				up_down_percent_result = up_down_percent + '%'
 				if cnt == 0:
 					self.__ui.label_4.setText(value)
-					self.__ui.label_5.setText(up_down_percent)
+					self.__ui.label_5.setText(up_down_percent_result)
 					#self.__ui.label.setText(value)
 					limit = self.__ui.lineEdit_11.text()
 					mail_title = "上证指数 "
 				elif cnt == 1:
 					self.__ui.label_6.setText(value)
-					self.__ui.label_7.setText(up_down_percent)
+					self.__ui.label_7.setText(up_down_percent_result)
 					limit = self.__ui.lineEdit_12.text()
 					mail_title = "深证成指 "
 				elif cnt == 2:
 					self.__ui.label_8.setText(value)
-					self.__ui.label_9.setText(up_down_percent)
+					self.__ui.label_9.setText(up_down_percent_result)
 					limit = self.__ui.lineEdit_13.text()
 					mail_title = "创业板 "
 
@@ -98,9 +102,12 @@ class MyWidgets(QWidget):
 						(prePrice, price, time) = return_value
 						prePrice = float(prePrice)
 						price = float(price)
-
-						up_down_percent = str((price -prePrice) / prePrice * 100)[0:6]
-						up_down_value = str(price - prePrice)
+						if price - prePrice > 0:
+							up_down_percent = str((price -prePrice) / prePrice * 100 + 0.005)[0:4] + '%'
+							up_down_value = str(price - prePrice + 0.005)[0:4]
+						else:
+							up_down_percent = str((price -prePrice) / prePrice * 100 - 0.005)[0:5] + '%'
+							up_down_value = str(price - prePrice - 0.005)[0:5]
 						value = str(price)
 						if number == 1:
 							self.__ui.label_10.setText(line)
@@ -191,9 +198,14 @@ class MyWidgets(QWidget):
 					return get_stock_info(stock_no,num_retries-1) 
 		return page_content
 	def _update(self):
-		self._set_count()
-		#self.timer = self.after(self.msec,self._update)
-		threading.Timer(1, self._update).start()
+		try:
+			self._set_count()
+			#self.timer = self.after(self.msec,self._update)
+			threading.Timer(1, self._update).start()
+		except:
+			print("something wrong happens, do the update again")
+			os.system("sleep 3")
+			self._update()
 	def start(self):
 		self._update()
 	def _set_count(self):
