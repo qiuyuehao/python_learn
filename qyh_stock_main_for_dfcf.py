@@ -10,11 +10,13 @@ from PyQt5.QtWidgets import *
 from send_mail import send_mail_to_myself
 import os
 
+
 number_mail_send=[0,0,0,0,0]
 zs_mail_send=[0,0,0,0,0]
 zs_list=['000001', '399001', '399006']
 class MyWidgets(QWidget):
 	msec = 1000
+	pre_date_day = 0;
 	running_cnt = 0
 	def __init__(self):
 		super().__init__()
@@ -78,18 +80,18 @@ class MyWidgets(QWidget):
 						if (zs_mail_send[cnt - 1] == 0):
 							zs_mail_send[cnt - 1] = 1
 							#print("cnt is:", zs_mail_send[cnt - 1])
-							send_mail_to_myself(mail_title+"up up up", "congraduation")
+							send_mail_to_myself(mail_title+"up up up..." + up_down_percent_result, "congraduation")
 						else:
 							#print("cnt is:", zs_mail_send[cnt - 1])
-							print(mail_title+"up up up...", "congraduation")
+							print(mail_title+"up up up..." + up_down_percent_result, "congraduation")
 					else:
 						if (zs_mail_send[cnt - 1] == 0):
 							zs_mail_send[cnt - 1] = 1
 							#print("cnt is:", zs_mail_send[cnt - 1])
-							send_mail_to_myself(mail_title+"down down down", "please don't be upset, you don't mean it")
+							send_mail_to_myself(mail_title+"down down down..." + up_down_percent_result, "please don't be upset, you don't mean it")
 						else:
 							#print("cnt is:", zs_mail_send[cnt - 1])
-							print(mail_title+"down down down...", "please don't be upset, you don't mean it")
+							print(mail_title+"down down down..." + up_down_percent_result, "please don't be upset, you don't mean it")
 	def start_get_info(self):
 		with open("stock_pool.txt", "r") as f:
 			for number, line in enumerate(f,start=1):
@@ -203,7 +205,7 @@ class MyWidgets(QWidget):
 	def _update(self):
 		try:
 			self._set_count()
-			#self.timer = self.after(self.msec,self._update)
+			self.update_notify_when_new_day()
 			threading.Timer(1, self._update).start()
 		except:
 			print("something wrong happens, do the update again")
@@ -216,15 +218,22 @@ class MyWidgets(QWidget):
 	def _set_count(self):
 		self.start_get_zs_info()
 		self.start_get_info()
-		#stock_info = self.get_stock_info()
-		#if stock_info is not None:
-			#stock_info = str(stock_info)
-			#stock_info = stock_info.split(",")
-			#print(stock_info)
-			#stock_value = stock_info[4]
-			#print(stock_value)
-			#stock_info = stock_info[14:64]
-		#self.__ui.label.setText(stock_value)
+	def update_notify_when_new_day(self):
+		time_now = time.localtime(time.time()).tm_mday
+		if (self.pre_date_day == 0):
+			self.pre_date_day = time_now
+		else:
+			if time_now != self.pre_date_day:
+				#print("update the notify now")
+				i = 0
+				while(i < len(number_mail_send)):
+					number_mail_send[i] = 0
+					i = i + 1
+				i = 0
+				while(i < len(zs_mail_send)):
+					zs_mail_send[i] = 0
+					i = i + 1
+				self.pre_date_day = time_now
 if __name__=='__main__':
 	app=QApplication(sys.argv)
 	w=MyWidgets()
