@@ -17,11 +17,16 @@ def get_dfcfgupiao(stock_num):
 		url_addr = url + "&secid=0." + "399006"
 	elif stock_num.startswith("0"):
 		url_addr = url + "&secid=0." + stock_num
+	elif stock_num.startswith("1"):
+		url_addr = url + "&secid=0." + stock_num
 	elif stock_num.startswith("3"):
 		url_addr = url + "&secid=0." + stock_num
 	elif stock_num.startswith("6"):
 		url_addr = url + "&secid=1." + stock_num
+	elif stock_num.startswith("5"):
+		url_addr = url + "&secid=1." + stock_num
 	else:
+		#url_addr = url + "&secid=1." + stock_num
 		return None
 	try:
 		print(url_addr)

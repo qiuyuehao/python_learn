@@ -15,6 +15,7 @@ zs_mail_send=[0,0,0,0,0]
 zs_list=['000001', '399001', '399006']
 class MyWidgets(QWidget):
 	msec = 1000
+	running_cnt = 0
 	def __init__(self):
 		super().__init__()
 		self.__ui=Ui_MainWindow()
@@ -209,6 +210,8 @@ class MyWidgets(QWidget):
 			os.system("sleep 3")
 			self._update()
 	def start(self):
+		self.running_cnt = self.running_cnt + 1
+		print("running the programme......running count:", self.running_cnt)
 		self._update()
 	def _set_count(self):
 		self.start_get_zs_info()
