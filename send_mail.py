@@ -3,7 +3,7 @@ import os
 #-*-coding:utf-8-*-
 
 def send_mail_to_myself(title, content):
-	cmd = "echo '%s' | mutt -s '%s'  yuqi@synaptics.com" % (content, title)
+	cmd = "echo '%s' | mutt -s '%s'  scutqyh@163.com" % (content, title)
 	print("send mail now cmd:", cmd)
 	os.system(cmd)
 	
