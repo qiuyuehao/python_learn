@@ -8,6 +8,7 @@ import sys, time, threading
 import urllib.request
 from PyQt5.QtWidgets import *
 from send_mail import send_mail_to_myself
+from send_wechat_msg import send_wechat_msg_to_myself
 import os
 
 
@@ -80,7 +81,8 @@ class MyWidgets(QWidget):
 						if (zs_mail_send[cnt - 1] == 0):
 							zs_mail_send[cnt - 1] = 1
 							#print("cnt is:", zs_mail_send[cnt - 1])
-							send_mail_to_myself(mail_title+"up up up..." + up_down_percent_result, "congraduation")
+							#send_wechat_msg_to_myself(mail_title+"up up up..." + up_down_percent_result, "congraduation")
+							send_wechat_msg_to_myself(mail_title+"up up up..." + up_down_percent_result + " congraduation")
 						else:
 							#print("cnt is:", zs_mail_send[cnt - 1])
 							print(mail_title+"up up up..." + up_down_percent_result, "congraduation")
@@ -88,7 +90,7 @@ class MyWidgets(QWidget):
 						if (zs_mail_send[cnt - 1] == 0):
 							zs_mail_send[cnt - 1] = 1
 							#print("cnt is:", zs_mail_send[cnt - 1])
-							send_mail_to_myself(mail_title+"down down down..." + up_down_percent_result, "please don't be upset, you don't mean it")
+							send_wechat_msg_to_myself(mail_title+"down down down..." + up_down_percent_result + " please don't be upset, you don't mean it")
 						else:
 							#print("cnt is:", zs_mail_send[cnt - 1])
 							print(mail_title+"down down down..." + up_down_percent_result, "please don't be upset, you don't mean it")
@@ -176,13 +178,13 @@ class MyWidgets(QWidget):
 								if float_up_down > 0:
 									if (number_mail_send[number - 1] == 0):
 										number_mail_send[number - 1] = 1
-										send_mail_to_myself(line+"up up up", "congraduation")
+										send_wechat_msg_to_myself(line+"up up up" + " congraduation")
 									else:
 										print(line+"up up up...", "congraduation")
 								else:
 									if (number_mail_send[number - 1] == 0):
 										number_mail_send[number - 1] = 1										
-										send_mail_to_myself(line+"down down down", "please don't be upset, you don't mean it")
+										send_wechat_msg_to_myself(line+"down down down" + " please don't be upset, you don't mean it")
 									else:										
 										print(line+"down down down...", "please don't be upset, you don't mean it")
 	def get_stock_info(self,num_retries=2):
