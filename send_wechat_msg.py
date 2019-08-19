@@ -129,36 +129,36 @@ def send_wechat_msg_to_myself(text):
 		return
 # 执行程序时直接发送
 # send_message()
-bot = Bot(cache_path=True)  # 登陆微信
-tuling = Tuling(api_key='ee161831f6d04cef91a27a7f08beb0c6')  # 机器人api
-		# 单个好友
-		# friend = bot.friends().search('harrison')[0]#好友的微信昵称，或者你存取的备注
-		#location = friend.city
-		# print(friend)
-		# print(friend.city)
-		# 单个好友
-friend = bot.friends().search('我的小助手')[0]#好友的微信昵称，或者你存取的备注
-location = friend.city
-print(friend)
-print(friend.city)
+#  bot = Bot(cache_path=True)  # 登陆微信
+#  #tuling = Tuling(api_key='ee161831f6d04cef91a27a7f08beb0c6')  # 机器人api
+		#  # 单个好友
+		#  # friend = bot.friends().search('harrison')[0]#好友的微信昵称，或者你存取的备注
+		#  #location = friend.city
+		#  # print(friend)
+		#  # print(friend.city)
+		#  # 单个好友
+#  friend = bot.friends().search('我的小助手')[0]#好友的微信昵称，或者你存取的备注
+#  location = friend.city
+#  print(friend)
+#  print(friend.city)
 
-# 回复发送给自己的消息，可以使用这个方法来进行测试机器人而不影响到他人
-@bot.register(bot.self, except_self=False)
-def reply_self(msg):
-	return 'received: {} ({})'.format(msg.text, msg.type)
+#  # 回复发送给自己的消息，可以使用这个方法来进行测试机器人而不影响到他人
+#  @bot.register(bot.self, except_self=False)
+#  def reply_self(msg):
+	#  return 'received: {} ({})'.format(msg.text, msg.type)
 
-my_friend = ensure_one(bot.search('无双'))
-#tuling = Tuling(api_key='你申请的 API KEY')
+#  my_friend = ensure_one(bot.search('无双'))
+#  #tuling = Tuling(api_key='你申请的 API KEY')
 
-# 使用图灵机器人自动与指定好友聊天
-@bot.register(my_friend)
-def reply_my_friend(msg):
-    tuling.do_reply(msg)
+#  # 使用图灵机器人自动与指定好友聊天
+#  @bot.register(my_friend)
+#  def reply_my_friend(msg):
+    #  tuling.do_reply(msg)
 
-# 定时器
-#print('start')
-#send_message_to_onefriend()
-#sched = BlockingScheduler()
-#sched.add_job(send_message, 'cron', day_of_week='0-6',
-#			  hour=23, minute=00)  # 设定发送的时间
-#sched.start()
+#  # 定时器
+#  #print('start')
+#  #send_message_to_onefriend()
+#  #sched = BlockingScheduler()
+#  #sched.add_job(send_message, 'cron', day_of_week='0-6',
+#  #			  hour=23, minute=00)  # 设定发送的时间
+#  #sched.start()

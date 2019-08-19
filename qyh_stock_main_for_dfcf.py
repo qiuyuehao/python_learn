@@ -44,8 +44,8 @@ class MyWidgets(QWidget):
 				prePrice = float(prePrice)
 				price = float(price)
 				if price - prePrice > 0:
-					up_down_percent = str((price -prePrice) / prePrice * 100 + 0.005)[0:4]	
-				else:	
+					up_down_percent = str((price -prePrice) / prePrice * 100 + 0.005)[0:4]
+				else:
 					up_down_percent = str((price -prePrice) / prePrice * 100 - 0.005)[0:5]
 
 				up_down_value = str(price - prePrice)
@@ -183,26 +183,26 @@ class MyWidgets(QWidget):
 										print(line+"up up up...", "congraduation")
 								else:
 									if (number_mail_send[number - 1] == 0):
-										number_mail_send[number - 1] = 1										
+										number_mail_send[number - 1] = 1
 										send_wechat_msg_to_myself(line+"down down down" + " please don't be upset, you don't mean it")
-									else:										
+									else:
 										print(line+"down down down...", "please don't be upset, you don't mean it")
 	def get_stock_info(self,num_retries=2):
 		#stock_no = self.__ui.lineEdit.text()
 		stock_no = '000002'
-		try: 
-			url = 'http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx?type=CT&cmd='+stock_no.strip()+'2&sty=CTBF&st=z&sr=&p=&ps=&cb=var%20pie_data=&js=(x)&token=28758b27a75f62dc3065b81f7facb365&_=1496312544427' 
-			headers = {'User-agent':'WSWP'} 
-			#request = urllib.Request(url,headers=headers) 
-			page = urllib.request.urlopen(url) 
+		try:
+			url = 'http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx?type=CT&cmd='+stock_no.strip()+'2&sty=CTBF&st=z&sr=&p=&ps=&cb=var%20pie_data=&js=(x)&token=28758b27a75f62dc3065b81f7facb365&_=1496312544427'
+			headers = {'User-agent':'WSWP'}
+			#request = urllib.Request(url,headers=headers)
+			page = urllib.request.urlopen(url)
 			#print(url)
-			page_content = page.read() 
-		except urllib.request.URLError as e: 
-			print('download error:',e.reason) 
-			page_content = None 
+			page_content = page.read()
+		except urllib.request.URLError as e:
+			print('download error:',e.reason)
+			page_content = None
 			if num_retries > 0:
-				if hasattr(e,'code' and 500 <= e.code <600): # recursively retry 5xx HTTP errors 
-					return get_stock_info(stock_no,num_retries-1) 
+				if hasattr(e,'code' and 500 <= e.code <600): # recursively retry 5xx HTTP errors
+					return get_stock_info(stock_no,num_retries-1)
 		return page_content
 	def _update(self):
 		try:
@@ -242,4 +242,4 @@ if __name__=='__main__':
 	#w.move(400,200)
 	w.show()
 	sys.exit(app.exec_())
-	
+
