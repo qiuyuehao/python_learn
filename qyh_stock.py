@@ -62,25 +62,29 @@ class Ui_MainWindow(object):
 			ui_list_dict["value"] = QtWidgets.QLabel(self.widget1)
 			ui_list_dict["notify"] = QtWidgets.QLineEdit(self.widget1)
 			ui_list_dict["limit"] = QtWidgets.QLineEdit(self.widget1)
+			ui_list_dict["upper"] = QtWidgets.QLineEdit(self.widget)
+			ui_list_dict["lower"] = QtWidgets.QLineEdit(self.widget)
 			self.gridLayout_3.addWidget(ui_list_dict["stock_name"], i, 0, 1, 1)
 			self.gridLayout_3.addWidget(ui_list_dict["up_down_value"], i, 1, 1, 1)
 			self.gridLayout_3.addWidget(ui_list_dict["up_down_percent"], i, 2, 1, 1)
 			self.gridLayout_3.addWidget(ui_list_dict["value"], i, 3, 1, 1)
 			self.gridLayout_3.addWidget(ui_list_dict["notify"], i, 4, 1, 1)
 			self.gridLayout_3.addWidget(ui_list_dict["limit"], i, 5, 1, 1)
+			self.gridLayout_3.addWidget(ui_list_dict["upper"], i, 6, 1, 1)
+			self.gridLayout_3.addWidget(ui_list_dict["lower"], i, 7, 1, 1)		
 			self.ui_list.append(ui_list_dict)
 		self.retranslateUi(MainWindow)
 		QtCore.QMetaObject.connectSlotsByName(MainWindow)
 	def get_zs_notify_value(self, line):
 		a = self.zs_list[line]["notify"].text()
-		print(type(a))
-		print(a)
 		return a
 	def get_zs_limit_value(self, line):
 		a = self.zs_list[line]["limit"].text()
-		print(type(a))
-		print(a)
 		return a
+	def get_upper_value(self, line):
+		return self.ui_list[line]["upper"].text()
+	def get_lower_value(self, line):
+		return self.ui_list[line]["lower"].text()
 	def get_notify_value(self, line):
 		return self.ui_list[line]["notify"].text()
 	def get_limit_value(self, line):
@@ -98,6 +102,12 @@ class Ui_MainWindow(object):
 			self.zs_list[i]["stock_name"].setText(stock_info[i]["stock_name"])
 			#self.zs_list[i]["up_down_value"].setText(stock_info[i]["up_down_value"])
 			self.zs_list[i]["up_down_percent"].setText(stock_info[i]["up_down_percent"])
+			if "notify" in stock_info[i].keys():
+				print("set notify ", i, stock_info[i]["notify"])
+				self.zs_list[i]["notify"].setText(stock_info[i]["notify"])
+			if "limit" in stock_info[i].keys():
+				print("set limit ", i, stock_info[i]["limit"])
+				self.zs_list[i]["limit"].setText(stock_info[i]["limit"])
 		i = 0
 		while i < stock_len:
 			self.zs_list[i]["value"].setVisible(True)
@@ -117,15 +127,21 @@ class Ui_MainWindow(object):
 			self.zs_list[i]["limit"].setVisible(False)
 			i = i + 1
 	def update_stock_info(self, stock_info):
-		print("77866")
 		stock_len = len(stock_info)
 		len_ui_list = len(self.ui_list)
-		print("778")
 		for i in range(0, stock_len):
 			self.ui_list[i]["value"].setText(stock_info[i]["value"])
 			self.ui_list[i]["stock_name"].setText(stock_info[i]["stock_name"])
 			self.ui_list[i]["up_down_value"].setText(stock_info[i]["up_down_value"])
 			self.ui_list[i]["up_down_percent"].setText(stock_info[i]["up_down_percent"])
+			if "notify" in stock_info[i].keys():
+				self.ui_list[i]["notify"].setText(stock_info[i]["notify"])
+			if "limit" in stock_info[i].keys():
+				self.ui_list[i]["limit"].setText(stock_info[i]["limit"])
+			if "upper" in stock_info[i].keys():
+				self.ui_list[i]["upper"].setText(stock_info[i]["upper"])
+			if "lower" in stock_info[i].keys():
+				self.ui_list[i]["lower"].setText(stock_info[i]["lower"])
 		i = 0
 		while i < stock_len:
 			self.ui_list[i]["value"].setVisible(True)
@@ -134,6 +150,8 @@ class Ui_MainWindow(object):
 			self.ui_list[i]["up_down_percent"].setVisible(True)
 			self.ui_list[i]["notify"].setVisible(True)
 			self.ui_list[i]["limit"].setVisible(True)
+			self.ui_list[i]["upper"].setVisible(True)
+			self.ui_list[i]["lower"].setVisible(True)
 			i = i + 1
 		i = stock_len
 		while i < len_ui_list:
@@ -143,4 +161,6 @@ class Ui_MainWindow(object):
 			self.ui_list[i]["up_down_percent"].setVisible(False)
 			self.ui_list[i]["notify"].setVisible(False)
 			self.ui_list[i]["limit"].setVisible(False)
+			self.ui_list[i]["upper"].setVisible(False)
+			self.ui_list[i]["lower"].setVisible(False)
 			i = i + 1
