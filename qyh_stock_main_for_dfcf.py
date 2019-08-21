@@ -9,7 +9,7 @@ import urllib.request
 from PyQt5.QtWidgets import *
 from send_mail import send_mail_to_myself
 from send_wechat_msg import send_wechat_msg_to_myself
-import os, re, signal
+import os, re
 
 
 zs_list=['000001', '399001', '399006']
@@ -20,6 +20,7 @@ class MyWidgets(QWidget):
 	pre_date_day = 0;
 	running_cnt = 0
 	stock_notify_already = {}
+	debug = True
 	def __init__(self):
 		super().__init__()
 		self.__ui=Ui_MainWindow()
@@ -27,9 +28,12 @@ class MyWidgets(QWidget):
 		self.__ui.pushButton_2.clicked.connect(self.close)
 		self.__ui.pushButton.clicked.connect(self.start)
 		self.get_and_update_init_stock_info()
+		try:
+			self.start_get_zs_info()
+			self.start_get_info()
+		except:
+			print("init start fail")
 		self.start()
-		signal.signal(signal.SIGINT, self.close)
-		signal.signal(signal.SIGTERM, self.close)
 	def get_zs_name(self, zs_str):
 		if zs_str == "000001":
 			return str("上证指数")
@@ -45,6 +49,8 @@ class MyWidgets(QWidget):
 		print("call update_notify_value name", name)
 		self.stock_notify_already[name] = 0
 	def notify_user_message(self, name, up_down_value, other_info, method):
+		if self.is_deal_time_now() == False:
+			return
 		if self.stock_notify_already[name] == 0:
 			print("not notify yet")
 			new_timer_thread = threading.Timer(notify_time, self.update_notify_value, (name,)).start()
@@ -242,19 +248,37 @@ class MyWidgets(QWidget):
 		print("running the programme......running count:", self.running_cnt)
 		self._update()
 	def _set_count(self):
-		self.start_get_zs_info()
-		self.start_get_info()
+		if self.is_deal_time_now() == False:
+			pass
+		else:
+			self.start_get_zs_info()
+			self.start_get_info()
 	def update_notify_when_new_day(self):
 		time_now = time.localtime(time.time()).tm_mday
 		if (self.pre_date_day == 0):
 			self.pre_date_day = time_now
 		else:
 			if time_now != self.pre_date_day:
-				pass
+				self.update_stock_notify()
+	def is_deal_time_now(self):
+		if self.debug == True:
+			return True
+		time_now = time.localtime()
+		if (time_now.tm_hour == 9) and (time_now.tm_min > 15):
+			return True
+		if (time_now.tm_hour == 10):
+			return True
+		if (time_now.tm_hour == 11) and (time_now.tm_min <= 30):
+			return True
+		if (time_now.tm_hour >= 13) and (time_now.tm_hour <= 15):
+			return True
+		return False
+	def update_stock_notify(self):
+		for kv in self.stock_notify_already:
+			self.stock_notify_already[kv] = 1
 if __name__=='__main__':
 	app=QApplication(sys.argv)
 	w=MyWidgets()
-	#w.move(400,200)
 	w.show()
 	sys.exit(app.exec_())
 
