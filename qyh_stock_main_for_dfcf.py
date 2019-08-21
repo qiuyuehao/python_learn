@@ -9,6 +9,7 @@ import urllib.request
 from PyQt5.QtWidgets import *
 from send_mail import send_mail_to_myself
 from send_wechat_msg import send_wechat_msg_to_myself
+from monitor_gupiao import compare_gupiao_info_from_file
 import os, re
 
 
@@ -20,13 +21,15 @@ class MyWidgets(QWidget):
 	pre_date_day = 0;
 	running_cnt = 0
 	stock_notify_already = {}
-	debug = True
+	debug = False
 	def __init__(self):
 		super().__init__()
 		self.__ui=Ui_MainWindow()
 		self.__ui.setupUi(self)
 		self.__ui.pushButton_2.clicked.connect(self.close)
 		self.__ui.pushButton.clicked.connect(self.start)
+		t = threading.Thread(target=compare_gupiao_info_from_file)
+		t.start()
 		self.get_and_update_init_stock_info()
 		try:
 			self.start_get_zs_info()
@@ -122,9 +125,6 @@ class MyWidgets(QWidget):
 					line = re.sub(' +', ' ', line)
 					line_info = line.split(" ")
 				name = line_info[0]
-				print("line info name", name, "length", len(line_info))
-				for i in range(0, len(line_info)):
-					print(i, "value", line_info[i])
 				stock_list_dict = {}
 				stock_list_dict["stock_name"] = name
 				stock_list_dict["up_down_percent"] = "unknow"
@@ -152,9 +152,6 @@ class MyWidgets(QWidget):
 					line = re.sub(' +', ' ', line)
 					line_info = line.split(" ")
 				name = line_info[0]
-				print("line info name", name, "length", len(line_info))
-				for i in range(0, len(line_info)):
-					print(i, "value", line_info[i])
 				stock_list_dict = {}
 				stock_list_dict["stock_name"] = self.get_zs_name(name)
 				stock_list_dict["up_down_percent"] = "unknow"
@@ -171,9 +168,9 @@ class MyWidgets(QWidget):
 			for number, line in enumerate(f,start=1):
 				line = line.strip('\n')
 				if line != None:
+					line = re.sub(' +', ' ', line)
 					line_info = line.split(" ")
 				name = line_info[0]
-				print("line info name", name)
 				if name in self.stock_notify_already.keys():
 					pass
 				else:
@@ -208,7 +205,7 @@ class MyWidgets(QWidget):
 						try:
 							notify = float(notify)
 						except:
-							print("exception here")
+							#print("notifty exception here")
 							continue
 						if (notify == 1):
 							try:
@@ -216,21 +213,21 @@ class MyWidgets(QWidget):
 								if (abs(float_up_down) > abs(limit)) and (limit != 0):
 									self.notify_user_message(stock_list_dict["stock_name"], float_up_down, limit, notify_method)
 							except:
-								print("limit exception here")
+								#print("limit exception here")
 								pass
 							try:
 								upper_value = float(upper_value)
 								if (price > upper_value):
 									self.notify_user_message(stock_list_dict["stock_name"], float_up_down, upper_value, notify_method)
 							except:
-								print("uppper exception here")
+								#print("uppper exception here")
 								pass						
 							try:
 								lower_value = float(lower_value)
 								if (price < lower_value):
 									self.notify_user_message(stock_list_dict["stock_name"], float_up_down, lower_value, notify_method)
 							except:
-								print("lower exception here")
+								#print("lower exception here")
 								pass						
 						stock_count = stock_count + 1
 		self.__ui.update_stock_info(stock_list)

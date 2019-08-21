@@ -102,11 +102,9 @@ class Ui_MainWindow(object):
 			self.zs_list[i]["stock_name"].setText(stock_info[i]["stock_name"])
 			#self.zs_list[i]["up_down_value"].setText(stock_info[i]["up_down_value"])
 			self.zs_list[i]["up_down_percent"].setText(stock_info[i]["up_down_percent"])
-			if "notify" in stock_info[i].keys():
-				print("set notify ", i, stock_info[i]["notify"])
+			if "notify" in stock_info[i].keys():		
 				self.zs_list[i]["notify"].setText(stock_info[i]["notify"])
-			if "limit" in stock_info[i].keys():
-				print("set limit ", i, stock_info[i]["limit"])
+			if "limit" in stock_info[i].keys():			
 				self.zs_list[i]["limit"].setText(stock_info[i]["limit"])
 		i = 0
 		while i < stock_len:
