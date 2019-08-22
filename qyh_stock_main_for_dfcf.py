@@ -7,10 +7,9 @@ from get_dfcfgupiao import get_gupiao_info
 import sys, time, threading
 import urllib.request
 from PyQt5.QtWidgets import *
-from send_mail import send_mail_to_myself
-from send_wechat_msg import send_wechat_msg_to_myself
 from monitor_gupiao import compare_gupiao_info_from_file
 import os, re
+from basic_function import *
 
 
 zs_list=['000001', '399001', '399006']
@@ -48,28 +47,6 @@ class MyWidgets(QWidget):
 			return str("未知指数")
 	def close(self):
 		os.system('killall -9 qyh_stock_main_for_dfcf.py')
-	def update_notify_value(self, name):
-		print("call update_notify_value name", name)
-		self.stock_notify_already[name] = 0
-	def notify_user_message(self, name, up_down_value, other_info, method):
-		if self.is_deal_time_now() == False:
-			return
-		if self.stock_notify_already[name] == 0:
-			print("not notify yet")
-			new_timer_thread = threading.Timer(notify_time, self.update_notify_value, (name,)).start()
-			self.stock_notify_already[name] = 1
-		else:
-			method = None
-		if up_down_value > 0:
-			tmp_content = name + "good news  +++  " + str(up_down_value) + "   price information:" +str(other_info)
-		else:
-			tmp_content = name + "bad news  --- " + str(up_down_value) + "   price information:" +str(other_info)
-		if method == "wechat":
-			send_wechat_msg_to_myself(tmp_content)
-		elif method == "mail":
-			send_mail_to_myself(tmp_content, "no content")
-		else:
-			print(tmp_content)
 	def start_get_zs_info(self):
 		#print(len(zs_list))
 		cnt = 0
@@ -100,10 +77,6 @@ class MyWidgets(QWidget):
 					zs_stock_info["value"] = value
 					zs_stock_info["up_down_percent"] = up_down_percent_result
 					zs_info_list.append(zs_stock_info)
-					if zs_stock_info["stock_name"] in self.stock_notify_already.keys():
-						pass
-					else:
-						self.stock_notify_already[zs_stock_info["stock_name"]] = 0
 					float_up_down = float(up_down_percent)
 					notify = str(self.__ui.get_zs_notify_value(cnt))
 					limit = str(self.__ui.get_zs_limit_value(cnt))
@@ -114,7 +87,7 @@ class MyWidgets(QWidget):
 					except:
 						continue
 					if (abs(float_up_down) > abs(limit)) and (notify == 1) and (limit != 0):
-						self.notify_user_message(zs_stock_info["stock_name"], float_up_down, limit, notify_method)
+						notify_user_message(zs_stock_info["stock_name"], float_up_down, limit, notify_method)
 		self.__ui.update_zs_stock_info(zs_info_list)
 	def get_and_update_init_stock_info(self):
 		stock_list = []
@@ -171,10 +144,6 @@ class MyWidgets(QWidget):
 					line = re.sub(' +', ' ', line)
 					line_info = line.split(" ")
 				name = line_info[0]
-				if name in self.stock_notify_already.keys():
-					pass
-				else:
-					self.stock_notify_already[name] = 0
 				stock_num=get_stock_num_by_name(name)
 				if stock_num != None:
 					return_value = get_gupiao_info(stock_num[1])
@@ -211,30 +180,30 @@ class MyWidgets(QWidget):
 							try:
 								limit = float(limit)
 								if (abs(float_up_down) > abs(limit)) and (limit != 0):
-									self.notify_user_message(stock_list_dict["stock_name"], float_up_down, limit, notify_method)
+									notify_user_message(stock_list_dict["stock_name"], float_up_down, limit, notify_method)
 							except:
 								#print("limit exception here")
 								pass
 							try:
 								upper_value = float(upper_value)
 								if (price > upper_value):
-									self.notify_user_message(stock_list_dict["stock_name"], float_up_down, upper_value, notify_method)
+									notify_user_message(stock_list_dict["stock_name"], float_up_down, upper_value, notify_method)
 							except:
 								#print("uppper exception here")
 								pass						
 							try:
 								lower_value = float(lower_value)
 								if (price < lower_value):
-									self.notify_user_message(stock_list_dict["stock_name"], float_up_down, lower_value, notify_method)
+									notify_user_message(stock_list_dict["stock_name"], float_up_down, lower_value, notify_method)
 							except:
 								#print("lower exception here")
-								pass						
+								pass
 						stock_count = stock_count + 1
 		self.__ui.update_stock_info(stock_list)
 	def _update(self):
 		try:
 			self._set_count()
-			self.update_notify_when_new_day()
+			update_notify_when_new_day()
 			threading.Timer(1, self._update).start()
 		except:
 			print("something wrong happens, do the update again")
@@ -245,34 +214,11 @@ class MyWidgets(QWidget):
 		print("running the programme......running count:", self.running_cnt)
 		self._update()
 	def _set_count(self):
-		if self.is_deal_time_now() == False:
+		if is_deal_time_now() == False:
 			pass
 		else:
 			self.start_get_zs_info()
 			self.start_get_info()
-	def update_notify_when_new_day(self):
-		time_now = time.localtime(time.time()).tm_mday
-		if (self.pre_date_day == 0):
-			self.pre_date_day = time_now
-		else:
-			if time_now != self.pre_date_day:
-				self.update_stock_notify()
-	def is_deal_time_now(self):
-		if self.debug == True:
-			return True
-		time_now = time.localtime()
-		if (time_now.tm_hour == 9) and (time_now.tm_min > 15):
-			return True
-		if (time_now.tm_hour == 10):
-			return True
-		if (time_now.tm_hour == 11) and (time_now.tm_min <= 30):
-			return True
-		if (time_now.tm_hour >= 13) and (time_now.tm_hour <= 15):
-			return True
-		return False
-	def update_stock_notify(self):
-		for kv in self.stock_notify_already:
-			self.stock_notify_already[kv] = 1
 if __name__=='__main__':
 	app=QApplication(sys.argv)
 	w=MyWidgets()

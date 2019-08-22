@@ -7,6 +7,7 @@ import sys, time, threading
 import urllib.request
 from PyQt5.QtWidgets import *
 import os, re
+from basic_function import *
 
 def compare_gupiao_info_from_file():
 	while True:
@@ -63,6 +64,8 @@ def compare_the_infor(stock_one, stock_two, limit):
 	else:
 		return
 	if abs(up_down_percent_value_2 - up_down_percent_value) > limit:
-		print("should notify the difference now")
+		tmp_str = stock_one + " " + stock_two +  " "  + "should notify the difference now"
+		compare_notify(stock_one+stock_two, tmp_str, "mail")
+		print(stock_one, stock_two, "should notify the difference now")
 if __name__=='__main__':
 	compare_gupiao_info_from_file()
