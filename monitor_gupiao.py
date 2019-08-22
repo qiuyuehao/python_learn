@@ -24,6 +24,7 @@ def compare_gupiao_info_from_file():
 		time.sleep(2)
 				
 def compare_the_infor(stock_one, stock_two, limit):
+	up_down_percent_value = None
 	stock_num=get_stock_num_by_name(stock_one)
 	if stock_num != None:
 		return_value = get_gupiao_info(stock_num[1])
@@ -45,6 +46,7 @@ def compare_the_infor(stock_one, stock_two, limit):
 		return
 
 	stock_num=get_stock_num_by_name(stock_two)
+	up_down_percent_value_2 = None
 	if stock_num != None:
 		return_value = get_gupiao_info(stock_num[1])
 		if return_value != None:
@@ -63,9 +65,10 @@ def compare_the_infor(stock_one, stock_two, limit):
 			up_down_percent_value_2 = float(up_down_percent_num)
 	else:
 		return
-	if abs(up_down_percent_value_2 - up_down_percent_value) > limit:
-		tmp_str = stock_one + " " + stock_two +  " "  + "should notify the difference now"
-		compare_notify(stock_one+stock_two, tmp_str, "mail")
-		print(stock_one, stock_two, "should notify the difference now")
+	if (up_down_percent_value != None) and (up_down_percent_value_2 != None):
+		if abs(up_down_percent_value_2 - up_down_percent_value) > limit:
+			tmp_str = stock_one + " " + stock_two +  " "  + "should notify the difference now"
+			compare_notify(stock_one+stock_two, tmp_str, "mail")
+			print(stock_one, stock_two, "should notify the difference now")
 if __name__=='__main__':
 	compare_gupiao_info_from_file()

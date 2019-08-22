@@ -27,6 +27,9 @@ class Ui_MainWindow(object):
 		self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
 		self.pushButton_2.setGeometry(QtCore.QRect(580, 590, 89, 25))
 		self.pushButton_2.setObjectName("pushButton_2")
+		self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
+		self.pushButton_3.setGeometry(QtCore.QRect(350, 590, 89, 25))
+		self.pushButton_3.setObjectName("pushButton_3")
 		self.widget = QtWidgets.QWidget(self.centralwidget)
 		self.widget.setGeometry(QtCore.QRect(30, 20, 671, 121))
 		self.widget.setObjectName("widget")
@@ -93,6 +96,7 @@ class Ui_MainWindow(object):
 		_translate = QtCore.QCoreApplication.translate
 		self.pushButton.setText(_translate("MainWindow", "start"))
 		self.pushButton_2.setText(_translate("MainWindow", "stop"))
+		self.pushButton_3.setText(_translate("MainWindow", "edit"))
 		MainWindow.setWindowTitle(_translate("MainWindow", "qyh_stock_win"))
 	def update_zs_stock_info(self, stock_info):
 		stock_len = len(stock_info)

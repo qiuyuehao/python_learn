@@ -12,9 +12,8 @@ import os, re
 from basic_function import *
 
 
-zs_list=['000001', '399001', '399006']
 notify_method = "mail"
-notify_time = 60 * 30
+
 class MyWidgets(QWidget):
 	msec = 1000
 	pre_date_day = 0;
@@ -27,6 +26,7 @@ class MyWidgets(QWidget):
 		self.__ui.setupUi(self)
 		self.__ui.pushButton_2.clicked.connect(self.close)
 		self.__ui.pushButton.clicked.connect(self.start)
+		self.__ui.pushButton_3.clicked.connect(self.edit)
 		t = threading.Thread(target=compare_gupiao_info_from_file)
 		t.start()
 		self.get_and_update_init_stock_info()
@@ -45,6 +45,12 @@ class MyWidgets(QWidget):
 			return str("创业板")
 		else:
 			return str("未知指数")
+	def edit(self):
+		print("not implement, please wait")
+		#w.hide()
+		#edit_w = UiEditWindow()
+		#edit_w.setupUi(self)
+		#edit_w.exec()
 	def close(self):
 		os.system('killall -9 qyh_stock_main_for_dfcf.py')
 	def start_get_zs_info(self):
@@ -219,9 +225,11 @@ class MyWidgets(QWidget):
 		else:
 			self.start_get_zs_info()
 			self.start_get_info()
+
 if __name__=='__main__':
 	app=QApplication(sys.argv)
 	w=MyWidgets()
+	#edit_w = UiEditWindow()
 	w.show()
 	sys.exit(app.exec_())
 

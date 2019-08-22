@@ -5,7 +5,8 @@
 import sys, time, threading
 import urllib.request
 import os, re
-
+from send_mail import send_mail_to_myself
+from send_wechat_msg import send_wechat_msg_to_myself
 message_notify_already = {}
 notify_time = 60 * 30
 pre_date_day = 0
@@ -30,9 +31,10 @@ def compare_notify(name, tmp_str, method):
 	if method == "wechat":
 		send_wechat_msg_to_myself(tmp_str)
 	elif method == "mail":
+		#pass
 		send_mail_to_myself(tmp_str, "no content")
 	else:
-		print(tmp_content)
+		print(tmp_str)
 
 
 def update_notify_when_new_day():
