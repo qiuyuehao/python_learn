@@ -56,7 +56,7 @@ def is_deal_time_now():
 	if debug == True:
 		return True
 	time_now = time.localtime()
-	if (time_now.tm_hour == 9) and (time_now.tm_min > 15):
+	if (time_now.tm_hour == 9) and (time_now.tm_min >= 30):
 		return True
 	if (time_now.tm_hour == 10):
 		return True

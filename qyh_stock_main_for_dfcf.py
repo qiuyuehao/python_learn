@@ -9,10 +9,19 @@ import urllib.request
 from PyQt5.QtWidgets import *
 from monitor_gupiao import compare_gupiao_info_from_file
 import os, re
+from edit import EditWindow
 from basic_function import *
 
 
 notify_method = "mail"
+
+class MyEditWindow(QMainWindow):
+	def __init__(self):
+		super().__init__()
+		self.ui = EditWindow()
+		self.ui.setupUi(self)
+	def open(self):
+		self.show()
 
 class MyWidgets(QWidget):
 	msec = 1000
@@ -22,11 +31,11 @@ class MyWidgets(QWidget):
 	debug = False
 	def __init__(self):
 		super().__init__()
-		self.__ui=Ui_MainWindow()
-		self.__ui.setupUi(self)
-		self.__ui.pushButton_2.clicked.connect(self.close)
-		self.__ui.pushButton.clicked.connect(self.start)
-		self.__ui.pushButton_3.clicked.connect(self.edit)
+		self.ui=Ui_MainWindow()
+		self.ui.setupUi(self)
+		self.ui.pushButton_2.clicked.connect(self.close)
+		self.ui.pushButton.clicked.connect(self.start)
+		#self.ui.pushButton_3.clicked.connect(self.edit)
 		t = threading.Thread(target=compare_gupiao_info_from_file)
 		t.start()
 		self.get_and_update_init_stock_info()
@@ -84,8 +93,8 @@ class MyWidgets(QWidget):
 					zs_stock_info["up_down_percent"] = up_down_percent_result
 					zs_info_list.append(zs_stock_info)
 					float_up_down = float(up_down_percent)
-					notify = str(self.__ui.get_zs_notify_value(cnt))
-					limit = str(self.__ui.get_zs_limit_value(cnt))
+					notify = str(self.ui.get_zs_notify_value(cnt))
+					limit = str(self.ui.get_zs_limit_value(cnt))
 					cnt = cnt + 1
 					try:
 						notify = float(notify)
@@ -94,7 +103,7 @@ class MyWidgets(QWidget):
 						continue
 					if (abs(float_up_down) > abs(limit)) and (notify == 1) and (limit != 0):
 						notify_user_message(zs_stock_info["stock_name"], float_up_down, limit, notify_method)
-		self.__ui.update_zs_stock_info(zs_info_list)
+		self.ui.update_zs_stock_info(zs_info_list)
 	def get_and_update_init_stock_info(self):
 		stock_list = []
 		with open("stock_pool.txt", "r") as f:
@@ -122,7 +131,7 @@ class MyWidgets(QWidget):
 					stock_list_dict["upper"] = line_info[2]
 					stock_list_dict["lower"] = line_info[3]
 				stock_list.append(stock_list_dict)
-		self.__ui.update_stock_info(stock_list)
+		self.ui.update_stock_info(stock_list)
 		stock_list = []
 		with open("zs_pool.txt", "r") as f:
 			for number, line in enumerate(f,start=1):
@@ -139,7 +148,7 @@ class MyWidgets(QWidget):
 					stock_list_dict["notify"] = "1"
 					stock_list_dict["limit"] = line_info[1]
 				stock_list.append(stock_list_dict)
-		self.__ui.update_zs_stock_info(stock_list)
+		self.ui.update_zs_stock_info(stock_list)
 	def start_get_info(self):
 		stock_list = []
 		with open("stock_pool.txt", "r") as f:
@@ -173,10 +182,10 @@ class MyWidgets(QWidget):
 						stock_list_dict["value"] = value
 						stock_list.append(stock_list_dict)
 						float_up_down = float(up_down_percent_num)
-						notify = self.__ui.get_notify_value(stock_count)
-						limit = self.__ui.get_limit_value(stock_count)
-						upper_value = self.__ui.get_upper_value(stock_count)
-						lower_value = self.__ui.get_lower_value(stock_count)
+						notify = self.ui.get_notify_value(stock_count)
+						limit = self.ui.get_limit_value(stock_count)
+						upper_value = self.ui.get_upper_value(stock_count)
+						lower_value = self.ui.get_lower_value(stock_count)
 						try:
 							notify = float(notify)
 						except:
@@ -205,7 +214,7 @@ class MyWidgets(QWidget):
 								#print("lower exception here")
 								pass
 						stock_count = stock_count + 1
-		self.__ui.update_stock_info(stock_list)
+		self.ui.update_stock_info(stock_list)
 	def _update(self):
 		try:
 			self._set_count()
@@ -230,6 +239,8 @@ if __name__=='__main__':
 	app=QApplication(sys.argv)
 	w=MyWidgets()
 	#edit_w = UiEditWindow()
+	edit_w = MyEditWindow()
+	w.ui.pushButton_3.clicked.connect(edit_w.open)
 	w.show()
 	sys.exit(app.exec_())
 
