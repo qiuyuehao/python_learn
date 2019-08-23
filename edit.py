@@ -8,21 +8,24 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from PyQt5.QtWidgets import QFileDialog
 
 class EditWindow():
 	def setupUi(self, MainWindow):
 		MainWindow.setObjectName("MainWindow")
 		MainWindow.resize(663, 600)
+		self.mwindow = MainWindow
 		self.centralwidget = QtWidgets.QWidget(MainWindow)
 		self.centralwidget.setObjectName("centralwidget")
-        
-		self.textBrowser = QtWidgets.QTextBrowser(self.centralwidget)
-		self.textBrowser.setGeometry(QtCore.QRect(30, 20, 451, 511))
-		self.textBrowser.setObjectName("textBrowser")
+		
+		self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
+		self.textEdit.setGeometry(QtCore.QRect(30, 20, 451, 511))
+		self.textEdit.setObjectName("textEdit")
 		self.pushButton = QtWidgets.QPushButton(self.centralwidget)
 		self.pushButton.setGeometry(QtCore.QRect(510, 50, 99, 27))
 		self.pushButton.setObjectName("pushButton")
+		self.pushButton.clicked.connect(self.open_file)
+	
 		self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
 		self.pushButton_2.setGeometry(QtCore.QRect(510, 120, 99, 27))
 		self.pushButton_2.setObjectName("pushButton_2")
@@ -40,7 +43,16 @@ class EditWindow():
 
 		self.retranslateUi(MainWindow)
 		QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
+	def open_file(self):
+		#fileName = QFileDialog.getOpenFileName(self, tr("Open File"),"./",tr("TextFile (*.txt)"))
+		fileName = QFileDialog.getOpenFileName(self.mwindow, "Open File","./", "*.txt")
+		if fileName == None:
+			print("please select a file")
+			return
+		else:
+			print("file select is ",  fileName[0])
+			self.textEdit.setText
+			
 	def retranslateUi(self, MainWindow):
 		_translate = QtCore.QCoreApplication.translate
 		MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))

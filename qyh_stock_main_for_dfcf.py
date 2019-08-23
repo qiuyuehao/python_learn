@@ -93,8 +93,8 @@ class MyWidgets(QWidget):
 					zs_stock_info["up_down_percent"] = up_down_percent_result
 					zs_info_list.append(zs_stock_info)
 					float_up_down = float(up_down_percent)
-					notify = str(self.ui.get_zs_notify_value(cnt))
-					limit = str(self.ui.get_zs_limit_value(cnt))
+					notify = str(self.ui.get_zs_notify_value(zs_stock_info["stock_name"]))
+					limit = str(self.ui.get_zs_limit_value(zs_stock_info["stock_name"]))
 					cnt = cnt + 1
 					try:
 						notify = float(notify)
@@ -182,10 +182,11 @@ class MyWidgets(QWidget):
 						stock_list_dict["value"] = value
 						stock_list.append(stock_list_dict)
 						float_up_down = float(up_down_percent_num)
-						notify = self.ui.get_notify_value(stock_count)
-						limit = self.ui.get_limit_value(stock_count)
-						upper_value = self.ui.get_upper_value(stock_count)
-						lower_value = self.ui.get_lower_value(stock_count)
+						notify = self.ui.get_notify_value_by_name(name)
+						limit = self.ui.get_limit_value_by_name(name)
+						upper_value = self.ui.get_upper_value_by_name(name)
+						lower_value = self.ui.get_lower_value_by_name(name)
+						stock_count = stock_count + 1
 						try:
 							notify = float(notify)
 						except:
@@ -213,7 +214,6 @@ class MyWidgets(QWidget):
 							except:
 								#print("lower exception here")
 								pass
-						stock_count = stock_count + 1
 		self.ui.update_stock_info(stock_list)
 	def _update(self):
 		try:

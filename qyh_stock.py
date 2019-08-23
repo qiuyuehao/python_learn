@@ -10,11 +10,14 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QIcon
 
+init_valid_cnt = 3
 class Ui_MainWindow(object):
 	display_per_page = 7
 	zs_display_per_page = 5
 	ui_list = []
+	valid_stock_cnt = 0
 	zs_list = []
+	valid_zs_cnt = 0
 	def setupUi(self, MainWindow):
 		MainWindow.setObjectName("qyh_stock_win")
 		MainWindow.resize(778, 851)
@@ -44,6 +47,7 @@ class Ui_MainWindow(object):
 			ui_list_dict["up_down_percent"] = QtWidgets.QLabel(self.widget)
 			ui_list_dict["notify"] = QtWidgets.QLineEdit(self.widget)
 			ui_list_dict["limit"] = QtWidgets.QLineEdit(self.widget)
+			ui_list_dict["valid_cnt"] = 0
 			self.gridLayout.addWidget(ui_list_dict["stock_name"], 0, i, 1, 1)
 			self.gridLayout.addWidget(ui_list_dict["up_down_percent"], 1, i, 1, 1)
 			self.gridLayout.addWidget(ui_list_dict["value"], 2, i, 1, 1)
@@ -67,6 +71,7 @@ class Ui_MainWindow(object):
 			ui_list_dict["limit"] = QtWidgets.QLineEdit(self.widget1)
 			ui_list_dict["upper"] = QtWidgets.QLineEdit(self.widget)
 			ui_list_dict["lower"] = QtWidgets.QLineEdit(self.widget)
+			ui_list_dict["valid_cnt"] = init_valid_cnt
 			self.gridLayout_3.addWidget(ui_list_dict["stock_name"], i, 0, 1, 1)
 			self.gridLayout_3.addWidget(ui_list_dict["up_down_value"], i, 1, 1, 1)
 			self.gridLayout_3.addWidget(ui_list_dict["up_down_percent"], i, 2, 1, 1)
@@ -78,20 +83,42 @@ class Ui_MainWindow(object):
 			self.ui_list.append(ui_list_dict)
 		self.retranslateUi(MainWindow)
 		QtCore.QMetaObject.connectSlotsByName(MainWindow)
-	def get_zs_notify_value(self, line):
-		a = self.zs_list[line]["notify"].text()
-		return a
-	def get_zs_limit_value(self, line):
-		a = self.zs_list[line]["limit"].text()
-		return a
-	def get_upper_value(self, line):
-		return self.ui_list[line]["upper"].text()
-	def get_lower_value(self, line):
-		return self.ui_list[line]["lower"].text()
-	def get_notify_value(self, line):
-		return self.ui_list[line]["notify"].text()
-	def get_limit_value(self, line):
-		return self.ui_list[line]["limit"].text()
+	def get_zs_notify_value(self, name):
+		if len(self.zs_list) != 0:
+			for i in range(0, len(self.zs_list)):
+				if name == self.zs_list[i]["stock_name"].text():
+					return self.zs_list[i]["notify"].text()
+		return None
+	def get_zs_limit_value(self, name):
+		if len(self.zs_list) != 0:
+			for i in range(0, len(self.zs_list)):
+				if name == self.zs_list[i]["stock_name"].text():
+					return self.zs_list[i]["limit"].text()
+		return None
+	def get_upper_value_by_name(self, name):
+		if len(self.ui_list) != 0:
+			for i in range(0, len(self.ui_list)):
+				if name == self.ui_list[i]["stock_name"].text():
+					return self.ui_list[i]["upper"].text()
+		return None
+	def get_lower_value_by_name(self, name):
+		if len(self.ui_list) != 0:
+			for i in range(0, len(self.ui_list)):
+				if name == self.ui_list[i]["stock_name"].text():
+					return self.ui_list[i]["lower"].text()
+		return None
+	def get_notify_value_by_name(self, name):
+		if len(self.ui_list) != 0:
+			for i in range(0, len(self.ui_list)):
+				if name == self.ui_list[i]["stock_name"].text():
+					return self.ui_list[i]["notify"].text()
+		return None
+	def get_limit_value_by_name(self, name):
+		if len(self.ui_list) != 0:
+			for i in range(0, len(self.ui_list)):
+				if name == self.ui_list[i]["stock_name"].text():
+					return self.ui_list[i]["limit"].text()
+		return None
 	def retranslateUi(self, MainWindow):
 		_translate = QtCore.QCoreApplication.translate
 		self.pushButton.setText(_translate("MainWindow", "start"))
@@ -102,67 +129,88 @@ class Ui_MainWindow(object):
 		stock_len = len(stock_info)
 		len_ui_list = len(self.zs_list)
 		for i in range(0, stock_len):
-			self.zs_list[i]["value"].setText(stock_info[i]["value"])
-			self.zs_list[i]["stock_name"].setText(stock_info[i]["stock_name"])
-			#self.zs_list[i]["up_down_value"].setText(stock_info[i]["up_down_value"])
-			self.zs_list[i]["up_down_percent"].setText(stock_info[i]["up_down_percent"])
-			if "notify" in stock_info[i].keys():		
-				self.zs_list[i]["notify"].setText(stock_info[i]["notify"])
-			if "limit" in stock_info[i].keys():			
-				self.zs_list[i]["limit"].setText(stock_info[i]["limit"])
-		i = 0
-		while i < stock_len:
-			self.zs_list[i]["value"].setVisible(True)
-			self.zs_list[i]["stock_name"].setVisible(True)
-			#self.zs_list[i]["up_down_value"].setVisible(True)
-			self.zs_list[i]["up_down_percent"].setVisible(True)
-			self.zs_list[i]["notify"].setVisible(True)
-			self.zs_list[i]["limit"].setVisible(True)
-			i = i + 1
-		i = stock_len
-		while i < len_ui_list:
-			self.zs_list[i]["value"].setVisible(False)
-			self.zs_list[i]["stock_name"].setVisible(False)
-			#self.ui_list[i]["up_down_value"].setVisible(False)
-			self.zs_list[i]["up_down_percent"].setVisible(False)
-			self.zs_list[i]["notify"].setVisible(False)
-			self.zs_list[i]["limit"].setVisible(False)
-			i = i + 1
+			found = 0
+			for j in range(0, len_ui_list):
+				if (self.zs_list[j]["stock_name"].text() == stock_info[i]["stock_name"]):
+					self.zs_list[j]["value"].setText(stock_info[i]["value"])
+					self.zs_list[j]["stock_name"].setText(stock_info[i]["stock_name"])
+					#self.zs_list[i]["up_down_value"].setText(stock_info[i]["up_down_value"])
+					self.zs_list[j]["up_down_percent"].setText(stock_info[i]["up_down_percent"])
+					if "notify" in stock_info[i].keys():		
+						self.zs_list[j]["notify"].setText(stock_info[i]["notify"])
+					if "limit" in stock_info[i].keys():			
+						self.zs_list[j]["limit"].setText(stock_info[i]["limit"])
+					found = 1
+					self.zs_list[j]["valid_cnt"] = init_valid_cnt
+					break
+			if found == 0:#can not find a name match the stock_info, add a new one
+				self.zs_list[self.valid_zs_cnt]["stock_name"].setText(stock_info[i]["stock_name"])
+				self.zs_list[self.valid_zs_cnt]["up_down_percent"].setText(stock_info[i]["up_down_percent"])
+				self.zs_list[self.valid_zs_cnt]["value"].setText(stock_info[i]["value"])
+				if "notify" in stock_info[i].keys():		
+						self.zs_list[self.valid_zs_cnt]["notify"].setText(stock_info[i]["notify"])
+				if "limit" in stock_info[i].keys():			
+					self.zs_list[self.valid_zs_cnt]["limit"].setText(stock_info[i]["limit"])
+				self.zs_list[self.valid_zs_cnt]["valid_cnt"] = init_valid_cnt
+				self.valid_zs_cnt = self.valid_zs_cnt + 1
+		for i in range(0, len_ui_list):
+			if self.zs_list[i]["valid_cnt"] > 0:
+				self.zs_list[i]["valid_cnt"] = self.zs_list[i]["valid_cnt"] - 1
+			if self.zs_list[i]["valid_cnt"] > 0:
+				can_see = True
+			else:
+				can_see = False
+			self.zs_list[i]["value"].setVisible(can_see)
+			self.zs_list[i]["stock_name"].setVisible(can_see)
+			self.zs_list[i]["up_down_percent"].setVisible(can_see)
+			self.zs_list[i]["notify"].setVisible(can_see)
+			self.zs_list[i]["limit"].setVisible(can_see)
 	def update_stock_info(self, stock_info):
 		stock_len = len(stock_info)
 		len_ui_list = len(self.ui_list)
 		for i in range(0, stock_len):
-			self.ui_list[i]["value"].setText(stock_info[i]["value"])
-			self.ui_list[i]["stock_name"].setText(stock_info[i]["stock_name"])
-			self.ui_list[i]["up_down_value"].setText(stock_info[i]["up_down_value"])
-			self.ui_list[i]["up_down_percent"].setText(stock_info[i]["up_down_percent"])
-			if "notify" in stock_info[i].keys():
-				self.ui_list[i]["notify"].setText(stock_info[i]["notify"])
-			if "limit" in stock_info[i].keys():
-				self.ui_list[i]["limit"].setText(stock_info[i]["limit"])
-			if "upper" in stock_info[i].keys():
-				self.ui_list[i]["upper"].setText(stock_info[i]["upper"])
-			if "lower" in stock_info[i].keys():
-				self.ui_list[i]["lower"].setText(stock_info[i]["lower"])
-		i = 0
-		while i < stock_len:
-			self.ui_list[i]["value"].setVisible(True)
-			self.ui_list[i]["stock_name"].setVisible(True)
-			self.ui_list[i]["up_down_value"].setVisible(True)
-			self.ui_list[i]["up_down_percent"].setVisible(True)
-			self.ui_list[i]["notify"].setVisible(True)
-			self.ui_list[i]["limit"].setVisible(True)
-			self.ui_list[i]["upper"].setVisible(True)
-			self.ui_list[i]["lower"].setVisible(True)
-			i = i + 1
-		i = stock_len
-		while i < len_ui_list:
-			self.ui_list[i]["value"].setVisible(False)
-			self.ui_list[i]["stock_name"].setVisible(False)
-			self.ui_list[i]["up_down_value"].setVisible(False)
-			self.ui_list[i]["up_down_percent"].setVisible(False)
-			self.ui_list[i]["notify"].setVisible(False)
-			self.ui_list[i]["limit"].setVisible(False)
-			self.ui_list[i]["upper"].setVisible(False)
-			self.ui_list[i]["lower"].setVisible(False)
-			i = i + 1
+			found = 0
+			for j in range(0, len_ui_list):
+				if (self.ui_list[j]["stock_name"].text() == stock_info[i]["stock_name"]):
+					self.ui_list[j]["value"].setText(stock_info[i]["value"])
+					self.ui_list[j]["stock_name"].setText(stock_info[i]["stock_name"])
+					self.ui_list[i]["up_down_value"].setText(stock_info[i]["up_down_value"])
+					self.ui_list[j]["up_down_percent"].setText(stock_info[i]["up_down_percent"])
+					if "notify" in stock_info[i].keys():		
+						self.ui_list[j]["notify"].setText(stock_info[i]["notify"])
+					if "limit" in stock_info[i].keys():			
+						self.ui_list[j]["limit"].setText(stock_info[i]["limit"])
+					found = 1
+					self.ui_list[j]["valid_cnt"] = init_valid_cnt
+					break
+			if found == 0:#can not find a name match the stock_info, add a new one
+				self.ui_list[self.valid_stock_cnt]["stock_name"].setText(stock_info[i]["stock_name"])
+				self.ui_list[self.valid_stock_cnt]["up_down_percent"].setText(stock_info[i]["up_down_percent"])
+				self.ui_list[self.valid_stock_cnt]["value"].setText(stock_info[i]["value"])
+				self.ui_list[self.valid_stock_cnt]["up_down_value"].setText(stock_info[i]["up_down_value"])
+				self.ui_list[self.valid_stock_cnt]["value"].setText(stock_info[i]["value"])
+				self.ui_list[j]["valid_cnt"] = init_valid_cnt
+				if "notify" in stock_info[i].keys():		
+						self.ui_list[self.valid_stock_cnt]["notify"].setText(stock_info[i]["notify"])
+				if "limit" in stock_info[i].keys():			
+					self.ui_list[self.valid_stock_cnt]["limit"].setText(stock_info[i]["limit"])
+				if "upper" in stock_info[i].keys():		
+						self.ui_list[self.valid_stock_cnt]["upper"].setText(stock_info[i]["upper"])
+				if "lower" in stock_info[i].keys():			
+					self.ui_list[self.valid_stock_cnt]["lower"].setText(stock_info[i]["lower"])
+				self.valid_stock_cnt = self.valid_stock_cnt + 1
+		for i in range(0, len_ui_list):
+			if self.ui_list[i]["valid_cnt"] > 0:
+				self.ui_list[i]["valid_cnt"] = self.ui_list[i]["valid_cnt"] - 1
+			if self.ui_list[i]["valid_cnt"] > 0:
+				can_see = True
+			else:
+				can_see = False
+			self.ui_list[i]["value"].setVisible(can_see)
+			self.ui_list[i]["stock_name"].setVisible(can_see)
+			self.ui_list[i]["up_down_value"].setVisible(can_see)
+			self.ui_list[i]["up_down_percent"].setVisible(can_see)
+			self.ui_list[i]["notify"].setVisible(can_see)
+			self.ui_list[i]["limit"].setVisible(can_see)
+			self.ui_list[i]["upper"].setVisible(can_see)
+			self.ui_list[i]["lower"].setVisible(can_see)
