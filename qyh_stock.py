@@ -35,7 +35,8 @@ class Ui_MainWindow(object):
         self.pushButton_3.setObjectName("pushButton_3")
         self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_4.setGeometry(QtCore.QRect(420, 590, 80, 25))
-        self.pushButton_4.setObjectName("pushButton_4")
+        self.pushButton_4.setObjectName("p<F9>ushButton_4")
+        self.pushButton_4.clicked.connect(self.save_config_to_txt)
         self.widget = QtWidgets.QWidget(self.centralwidget)
         self.widget.setGeometry(QtCore.QRect(30, 20, 671, 121))
         self.widget.setObjectName("widget")
@@ -127,7 +128,7 @@ class Ui_MainWindow(object):
         self.pushButton.setText(_translate("MainWindow", "start"))
         self.pushButton_2.setText(_translate("MainWindow", "stop"))
         self.pushButton_3.setText(_translate("MainWindow", "edit"))
-        self.pushButton_4.setText(_translate("MainWindow", "save"))
+        self.pushButton_4.setText(_translate("MainWindow", "saveConfig"))
         MainWindow.setWindowTitle(_translate("MainWindow", "qyh_stock_win"))
     def update_zs_stock_info(self, stock_info):
         stock_len = len(stock_info)
@@ -197,7 +198,7 @@ class Ui_MainWindow(object):
                 self.ui_list[self.valid_stock_cnt]["value"].setText(stock_info[i]["value"])
                 self.ui_list[self.valid_stock_cnt]["up_down_value"].setText(stock_info[i]["up_down_value"])
                 self.ui_list[self.valid_stock_cnt]["value"].setText(stock_info[i]["value"])
-                self.ui_list[j]["valid_cnt"] = init_valid_cnt
+                self.ui_list[self.valid_stock_cnt]["valid_cnt"] = init_valid_cnt
                 if "notify" in stock_info[i].keys():
                         self.ui_list[self.valid_stock_cnt]["notify"].setText(stock_info[i]["notify"])
                 if "limit" in stock_info[i].keys():
@@ -222,3 +223,39 @@ class Ui_MainWindow(object):
             self.ui_list[i]["limit"].setVisible(can_see)
             self.ui_list[i]["upper"].setVisible(can_see)
             self.ui_list[i]["lower"].setVisible(can_see)
+    def save_config_to_txt(self):
+        len_ui_list = len(self.ui_list)
+        save_stock_txt_str = None
+        for i in range(0, self.valid_stock_cnt):
+            if save_stock_txt_str == None:
+                save_stock_txt_str = self.ui_list[i]["stock_name"].text()
+                print("init value:",save_stock_txt_str)
+            else:
+                save_stock_txt_str = save_stock_txt_str + self.ui_list[i]["stock_name"].text()
+            if self.ui_list[i]["limit"].text():
+                save_stock_txt_str = save_stock_txt_str + " " + self.ui_list[i]["limit"].text()
+                if self.ui_list[i]["upper"].text():
+                    save_stock_txt_str = save_stock_txt_str + " " + self.ui_list[i]["upper"].text()
+                if self.ui_list[i]["lower"].text():
+                    save_stock_txt_str = save_stock_txt_str + " " + self.ui_list[i]["lower"].text()
+            if i != self.valid_stock_cnt - 1:
+                save_stock_txt_str = save_stock_txt_str + "\n"
+        print("content of save stock info:\n",save_stock_txt_str)
+        len_ui_list = len(self.zs_list)
+        save_stock_txt_str = None
+        for i in range(0, self.valid_zs_cnt):
+            if save_stock_txt_str == None:
+                save_stock_txt_str = self.zs_list[i]["stock_name"].text()
+                print("init value:",save_stock_txt_str)
+            else:
+                save_stock_txt_str = save_stock_txt_str + self.zs_list[i]["stock_name"].text()
+            if self.zs_list[i]["limit"].text():
+                save_stock_txt_str = save_stock_txt_str + " " + self.zs_list[i]["limit"].text()
+                #  if self.ui_list[i]["upper"].text():
+                    #  save_stock_txt_str = save_stock_txt_str + " " + self.ui_list[i]["upper"].text()
+                #  if self.ui_list[i]["lower"].text():
+                    #  save_stock_txt_str = save_stock_txt_str + " " + self.ui_list[i]["lower"].text()
+            if i != self.valid_zs_cnt - 1:
+                save_stock_txt_str = save_stock_txt_str + "\n"
+        print("content of save zs info:\n",save_stock_txt_str)
+
