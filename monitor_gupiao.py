@@ -22,7 +22,7 @@ def compare_gupiao_info_from_file():
                 limit = float(line_info[2])
                 compare_the_infor(name1, name2, limit)
         time.sleep(2)
-                
+
 def compare_the_infor(stock_one, stock_two, limit):
     up_down_percent_value = None
     stock_num=get_stock_num_by_name(stock_one)
@@ -69,6 +69,6 @@ def compare_the_infor(stock_one, stock_two, limit):
         if abs(up_down_percent_value_2 - up_down_percent_value) > limit:
             tmp_str = stock_one + " " + stock_two +  " "  + "should notify the difference now"
             compare_notify(stock_one+stock_two, tmp_str, "mail")
-            print(stock_one, stock_two, "should notify the difference now")
+            #  print(stock_one, stock_two, "should notify the difference now")
 if __name__=='__main__':
     compare_gupiao_info_from_file()
