@@ -145,6 +145,10 @@ class Ui_MainWindow(object):
                         self.zs_list[j]["notify"].setText(stock_info[i]["notify"])
                     if "limit" in stock_info[i].keys():
                         self.zs_list[j]["limit"].setText(stock_info[i]["limit"])
+                    if "color" in stock_info[i].keys():
+                        self.zs_list[j]["stock_name"].setStyleSheet('color:red;background-color:blue')
+                    else:
+                        self.zs_list[j]["stock_name"].setStyleSheet('')
                     found = 1
                     self.zs_list[j]["valid_cnt"] = init_valid_cnt
                     break
@@ -189,6 +193,10 @@ class Ui_MainWindow(object):
                         self.ui_list[j]["upper"].setText(stock_info[i]["upper"])
                     if "lower" in stock_info[i].keys():
                         self.ui_list[j]["lower"].setText(stock_info[i]["lower"])
+                    if "color" in stock_info[i].keys():
+                        self.ui_list[j]["stock_name"].setStyleSheet('color:red;background-color:blue')
+                    else:
+                        self.ui_list[j]["stock_name"].setStyleSheet('')
                     found = 1
                     self.ui_list[j]["valid_cnt"] = init_valid_cnt
                     break
@@ -229,7 +237,6 @@ class Ui_MainWindow(object):
         for i in range(0, self.valid_stock_cnt):
             if save_stock_txt_str == None:
                 save_stock_txt_str = self.ui_list[i]["stock_name"].text()
-                print("init value:",save_stock_txt_str)
             else:
                 save_stock_txt_str = save_stock_txt_str + self.ui_list[i]["stock_name"].text()
             if self.ui_list[i]["limit"].text():
@@ -240,22 +247,22 @@ class Ui_MainWindow(object):
                     save_stock_txt_str = save_stock_txt_str + " " + self.ui_list[i]["lower"].text()
             if i != self.valid_stock_cnt - 1:
                 save_stock_txt_str = save_stock_txt_str + "\n"
-        print("content of save stock info:\n",save_stock_txt_str)
+        f = open("stock_pool.txt", "w")
+        f.write(save_stock_txt_str)
+        f.close()
         len_ui_list = len(self.zs_list)
         save_stock_txt_str = None
+
         for i in range(0, self.valid_zs_cnt):
             if save_stock_txt_str == None:
                 save_stock_txt_str = self.zs_list[i]["stock_name"].text()
-                print("init value:",save_stock_txt_str)
             else:
                 save_stock_txt_str = save_stock_txt_str + self.zs_list[i]["stock_name"].text()
             if self.zs_list[i]["limit"].text():
                 save_stock_txt_str = save_stock_txt_str + " " + self.zs_list[i]["limit"].text()
-                #  if self.ui_list[i]["upper"].text():
-                    #  save_stock_txt_str = save_stock_txt_str + " " + self.ui_list[i]["upper"].text()
-                #  if self.ui_list[i]["lower"].text():
-                    #  save_stock_txt_str = save_stock_txt_str + " " + self.ui_list[i]["lower"].text()
             if i != self.valid_zs_cnt - 1:
                 save_stock_txt_str = save_stock_txt_str + "\n"
-        print("content of save zs info:\n",save_stock_txt_str)
+        f = open("zs_pool.txt", "w")
+        f.write(save_stock_txt_str)
+        f.close()
 

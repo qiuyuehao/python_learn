@@ -55,6 +55,15 @@ class MyWidgets(QWidget):
             return str("创业板")
         else:
             return str("未知指数")
+    def get_stock_code_by_name(self, name):
+        if name == "上证指数":
+            return str("000001")
+        elif name == "深证指数":
+            return str("399001")
+        elif name == "创业板":
+            return str("399006")
+        else:
+            return str("未知指数")
     def edit(self):
         print("not implement, please wait")
         #w.hide()
@@ -74,6 +83,7 @@ class MyWidgets(QWidget):
                     line = re.sub(' +', ' ', line)
                     line_info = line.split(" ")
                 name = line_info[0]
+                name = self.get_stock_code_by_name(name)
                 return_value = get_gupiao_info(name)
                 if return_value != None:
                     (prePrice, price, time) = return_value
@@ -89,10 +99,10 @@ class MyWidgets(QWidget):
                     up_down_percent_result = up_down_percent + '%'
                     zs_stock_info = {}
 
-                    zs_stock_info["stock_name"] = self.get_zs_name(name)
+                    #  zs_stock_info["stock_name"] = self.get_zs_name(name)
+                    zs_stock_info["stock_name"] = line_info[0]
                     zs_stock_info["value"] = value
                     zs_stock_info["up_down_percent"] = up_down_percent_result
-                    zs_info_list.append(zs_stock_info)
                     float_up_down = float(up_down_percent)
                     notify = str(self.ui.get_zs_notify_value(zs_stock_info["stock_name"]))
                     limit = str(self.ui.get_zs_limit_value(zs_stock_info["stock_name"]))
@@ -101,9 +111,12 @@ class MyWidgets(QWidget):
                         notify = float(notify)
                         limit = float(limit)
                     except:
+                        zs_info_list.append(zs_stock_info)
                         continue
                     if (abs(float_up_down) > abs(limit)) and (notify == 1) and (limit != 0):
+                        zs_stock_info["color"] = "red"
                         notify_user_message(zs_stock_info["stock_name"], float_up_down, limit, notify_method)
+                    zs_info_list.append(zs_stock_info)
         self.ui.update_zs_stock_info(zs_info_list)
     def get_and_update_init_stock_info(self):
         stock_list = []
@@ -142,7 +155,8 @@ class MyWidgets(QWidget):
                     line_info = line.split(" ")
                 name = line_info[0]
                 stock_list_dict = {}
-                stock_list_dict["stock_name"] = self.get_zs_name(name)
+                #  stock_list_dict["stock_name"] = self.get_stock_code_by_name(name)
+                stock_list_dict["stock_name"] = line_info[0]
                 stock_list_dict["up_down_percent"] = "unknow"
                 stock_list_dict["value"] = "unknow"
                 if len(line_info) == 2:
@@ -181,7 +195,6 @@ class MyWidgets(QWidget):
                         stock_list_dict["up_down_percent"] = up_down_percent
                         stock_list_dict["up_down_value"] = up_down_value
                         stock_list_dict["value"] = value
-                        stock_list.append(stock_list_dict)
                         float_up_down = float(up_down_percent_num)
                         notify = self.ui.get_notify_value_by_name(name)
                         limit = self.ui.get_limit_value_by_name(name)
@@ -192,12 +205,14 @@ class MyWidgets(QWidget):
                             notify = float(notify)
                         except:
                             #print("notifty exception here")
+                            stock_list.append(stock_list_dict)
                             continue
                         if (notify == 1):
                             try:
                                 limit = float(limit)
                                 if (abs(float_up_down) > abs(limit)) and (limit != 0):
                                     notify_user_message(stock_list_dict["stock_name"], float_up_down, limit, notify_method)
+                                    stock_list_dict["color"] = "red"
                             except:
                                 #print("limit exception here")
                                 pass
@@ -205,6 +220,7 @@ class MyWidgets(QWidget):
                                 upper_value = float(upper_value)
                                 if (price > upper_value):
                                     notify_user_message(stock_list_dict["stock_name"], float_up_down, upper_value, notify_method)
+                                    stock_list_dict["color"] = "red"
                             except:
                                 #print("uppper exception here")
                                 pass
@@ -212,9 +228,11 @@ class MyWidgets(QWidget):
                                 lower_value = float(lower_value)
                                 if (price < lower_value):
                                     notify_user_message(stock_list_dict["stock_name"], float_up_down, lower_value, notify_method)
+                                    stock_list_dict["color"] = "red"
                             except:
                                 #print("lower exception here")
                                 pass
+                        stock_list.append(stock_list_dict)
         self.ui.update_stock_info(stock_list)
     def _update(self):
         try:
