@@ -89,7 +89,7 @@ class Ui_MainWindow(object):
             self.gridLayout_3.addWidget(ui_list_dict["lower"], i, 7, 1, 1)
             self.ui_list.append(ui_list_dict)
         self.widget2 = QtWidgets.QWidget(self.centralwidget)
-        self.widget2.setGeometry(QtCore.QRect(50, 430, 592, 351))
+        self.widget2.setGeometry(QtCore.QRect(30, 430, 592, 351))
         self.widget2.setObjectName("widget2")
         self.gridLayout_4 = QtWidgets.QGridLayout(self.widget2)
         self.gridLayout_4.setContentsMargins(10, 10, 10, 10)

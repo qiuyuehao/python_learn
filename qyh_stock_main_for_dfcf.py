@@ -48,9 +48,23 @@ class MyWidgets(QWidget):
             print("init start fail")
         self.start()
     def update_info_to_ui(self):
-        self.start_get_zs_info()
-        self.start_get_info()
-        self.get_compare_info()
+        thread_list = []
+        t = threading.Thread(target=self.start_get_zs_info)
+        #  t.start()
+        thread_list.append(t)
+        t = threading.Thread(target=self.start_get_info)
+        #  t.start()
+        thread_list.append(t)
+        t = threading.Thread(target=self.get_compare_info)
+        #  t.start()
+        thread_list.append(t)
+        for t in thread_list:
+            t.start()
+        for t in thread_list:
+            t.join()
+        #  self.start_get_zs_info()
+        #  self.start_get_info()
+        #  self.get_compare_info()
     def get_zs_name(self, zs_str):
         if zs_str == "000001":
             return str("上证指数")
@@ -350,9 +364,10 @@ class MyWidgets(QWidget):
         if is_deal_time_now() == False:
             pass
         else:
-            self.start_get_zs_info()
-            self.start_get_info()
-            self.get_compare_info()
+            #  self.start_get_zs_info()
+            self.update_info_to_ui()
+            #  self.start_get_info()
+            #  self.get_compare_info()
 
     def save_signal_slot(self, some_message):
         print("call signal slot here")
