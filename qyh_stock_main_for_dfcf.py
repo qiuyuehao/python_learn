@@ -30,6 +30,7 @@ class MyWidgets(QWidget):
     running_cnt = 0
     stock_notify_already = {}
     debug = False
+    update_running = 0
     def __init__(self):
         super().__init__()
         self.ui=Ui_MainWindow()
@@ -37,16 +38,19 @@ class MyWidgets(QWidget):
         self.ui.pushButton_2.clicked.connect(self.close)
         self.ui.pushButton.clicked.connect(self.start)
         #self.ui.pushButton_3.clicked.connect(self.edit)
-        #  t = threading.Thread(target=self.get_compare_info)
+        #  t = threading.Thread(target=self.get_and_update_init_stock_info)
         #  t.start()
         self.get_and_update_init_stock_info()
         try:
-            self.start_get_zs_info()
-            self.start_get_info()
-            self.get_compare_info()
+           t = threading.Thread(target=self.update_info_to_ui)
+           t.start()
         except:
             print("init start fail")
         self.start()
+    def update_info_to_ui(self):
+        self.start_get_zs_info()
+        self.start_get_info()
+        self.get_compare_info()
     def get_zs_name(self, zs_str):
         if zs_str == "000001":
             return str("上证指数")
@@ -339,7 +343,7 @@ class MyWidgets(QWidget):
             os.system("sleep 3")
             self._update()
     def start(self):
-        self._update()
+        threading.Timer(1, self._update).start()
     def _set_count(self):
         self.running_cnt = self.running_cnt + 1
         #  print("running the programme......running count:", self.running_cnt)
