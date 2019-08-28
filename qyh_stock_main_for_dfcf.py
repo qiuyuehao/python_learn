@@ -7,6 +7,7 @@ from get_dfcfgupiao import get_gupiao_info
 import sys, time, threading
 import urllib.request
 from PyQt5.QtWidgets import *
+from PyQt5 import QtCore
 from monitor_gupiao import compare_gupiao_info_from_file
 import os, re
 from edit import EditWindow
@@ -23,7 +24,13 @@ class MyEditWindow(QMainWindow):
         self.ui.setupUi(self)
     def open(self):
         self.show()
-
+    def keyPressEvent(self, e):
+        if e.key() == QtCore.Qt.Key_Escape:
+            self.close()
+        if e.key() == QtCore.Qt.Key_C:
+            if e.modifiers() & QtCore.Qt.ControlModifier:
+                print("ctrl + c press")
+                self.close()
 class MyWidgets(QWidget):
     msec = 1000
     pre_date_day = 0;
@@ -36,7 +43,7 @@ class MyWidgets(QWidget):
         self.ui=Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui.pushButton_2.clicked.connect(self.close)
-        self.ui.pushButton.clicked.connect(self.start)
+        #  self.ui.pushButton.clicked.connect(self.start)
         #self.ui.pushButton_3.clicked.connect(self.edit)
         #  t = threading.Thread(target=self.get_and_update_init_stock_info)
         #  t.start()
@@ -47,6 +54,10 @@ class MyWidgets(QWidget):
         except:
             print("init start fail")
         self.start()
+    def closeEvent(self, event):
+        event.accept()
+        print("kill the programme")
+        self.close()
     def update_info_to_ui(self):
         thread_list = []
         t = threading.Thread(target=self.start_get_zs_info)
@@ -370,10 +381,14 @@ class MyWidgets(QWidget):
             #  self.get_compare_info()
 
     def save_signal_slot(self, some_message):
-        print("call signal slot here")
         self.get_and_update_init_stock_info()
-        print(some_message)
-
+    def keyPressEvent(self, e):
+        if e.key() == QtCore.Qt.Key_Escape:
+            self.close()
+        if e.key() == QtCore.Qt.Key_C:
+            if e.modifiers() & QtCore.Qt.ControlModifier:
+                print("ctrl + c press")
+                self.close()
 if __name__=='__main__':
     app=QApplication(sys.argv)
     w=MyWidgets()

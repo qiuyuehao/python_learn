@@ -14,7 +14,7 @@ init_valid_cnt = 3
 class Ui_MainWindow(object):
     display_per_page = 7
     zs_display_per_page = 5
-    compare_per_page = 5
+    compare_per_page = 7
     ui_list = []
     valid_stock_cnt = 0
     zs_list = []
@@ -27,9 +27,9 @@ class Ui_MainWindow(object):
         MainWindow.setWindowIcon(QIcon('sea.jpg'))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(630, 200, 80, 25))
-        self.pushButton.setObjectName("pushButton")
+        #  self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        #  self.pushButton.setGeometry(QtCore.QRect(630, 200, 80, 25))
+        #  self.pushButton.setObjectName("pushButton")
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(630, 260, 80, 25))
         self.pushButton_2.setObjectName("pushButton_2")
@@ -163,11 +163,11 @@ class Ui_MainWindow(object):
         return None
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        self.pushButton.setText(_translate("MainWindow", "start"))
-        self.pushButton_2.setText(_translate("MainWindow", "stop"))
+        #  self.pushButton.setText(_translate("MainWindow", "start"))
+        self.pushButton_2.setText(_translate("MainWindow", "close"))
         self.pushButton_3.setText(_translate("MainWindow", "edit"))
         self.pushButton_4.setText(_translate("MainWindow", "saveConfig"))
-        MainWindow.setWindowTitle(_translate("MainWindow", "qyh_stock_win"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "qyh_stock_programme"))
     def update_compare_stock_info(self, stock_info):
         stock_len = len(stock_info)
         len_ui_list = len(self.compare_list)
