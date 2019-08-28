@@ -10,7 +10,8 @@ from send_wechat_msg import send_wechat_msg_to_myself
 message_notify_already = {}
 notify_time = 60 * 30
 pre_date_day = 0
-debug = False
+#  debug = False
+debug = True
 
 
 def compare_notify(name, tmp_str, method):
@@ -23,7 +24,7 @@ def compare_notify(name, tmp_str, method):
     else:
         message_notify_already[name] = 0
     if message_notify_already[name] == 0:
-        print("should notify", name)
+        #  print("should notify", name, tmp_str)
         new_timer_thread = threading.Timer(notify_time, update_notify_value, (name,)).start()
         message_notify_already[name] = 1
     else:
@@ -31,7 +32,7 @@ def compare_notify(name, tmp_str, method):
     if method == "wechat":
         send_wechat_msg_to_myself(tmp_str)
     elif method == "mail":
-        #pass
+        #  pass
         send_mail_to_myself(tmp_str, "no content")
     else:
         pass
@@ -57,13 +58,15 @@ def is_deal_time_now():
     if debug == True:
         return True
     time_now = time.localtime()
-    if (time_now.tm_hour == 9) and (time_now.tm_min >= 30):
+    if (time_now.tm_hour == 9) and (time_now.tm_min >= 15):
         return True
     if (time_now.tm_hour == 10):
         return True
     if (time_now.tm_hour == 11) and (time_now.tm_min <= 30):
         return True
     if (time_now.tm_hour >= 13) and (time_now.tm_hour < 15):
+        return True
+    if (time_now.tm_hour == 15) and (time_now.tm_min < 15):
         return True
     return False
 

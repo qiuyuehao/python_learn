@@ -37,12 +37,13 @@ class MyWidgets(QWidget):
         self.ui.pushButton_2.clicked.connect(self.close)
         self.ui.pushButton.clicked.connect(self.start)
         #self.ui.pushButton_3.clicked.connect(self.edit)
-        t = threading.Thread(target=compare_gupiao_info_from_file)
-        t.start()
+        #  t = threading.Thread(target=self.get_compare_info)
+        #  t.start()
         self.get_and_update_init_stock_info()
         try:
             self.start_get_zs_info()
             self.start_get_info()
+            self.get_compare_info()
         except:
             print("init start fail")
         self.start()
@@ -164,6 +165,100 @@ class MyWidgets(QWidget):
                     stock_list_dict["limit"] = line_info[1]
                 stock_list.append(stock_list_dict)
         self.ui.update_zs_stock_info(stock_list)
+        stock_list = []
+        with open("monitor_pool.txt", "r") as f:
+            for number, line in enumerate(f,start=1):
+                line = line.strip('\n').strip('\r')
+                if line != None:
+                    line = re.sub(' +', ' ', line)
+                    line_info = line.split(" ")
+                name_1 = line_info[0]
+                name_2 = line_info[1]
+                stock_list_dict = {}
+                #  stock_list_dict["stock_name"] = self.get_stock_code_by_name(name)
+                stock_list_dict["stock_name_1"] = line_info[0]
+                stock_list_dict["up_down_percent_1"] = "unknow"
+                stock_list_dict["stock_name_2"] = line_info[1]
+                stock_list_dict["up_down_percent_2"] = "unknow"
+                if len(line_info) == 3:
+                    stock_list_dict["notify"] = "1"
+                    stock_list_dict["limit"] = line_info[2]
+                stock_list.append(stock_list_dict)
+        self.ui.update_compare_stock_info(stock_list)
+    def get_compare_info(self):
+        stock_list = []
+        float_up_down_1 = 0
+        float_up_down_2 = 0
+        with open("monitor_pool.txt", "r") as f:
+            stock_count = 0
+            for number, line in enumerate(f,start=1):
+                line = line.strip('\n')
+                if line != None:
+                    line = re.sub(' +', ' ', line)
+                    line_info = line.split(" ")
+                name_1 = line_info[0]
+                name_2 = line_info[1]
+                stock_list_dict = {}
+                stock_num=get_stock_num_by_name(name_1)
+                if stock_num != None:
+                    return_value = get_gupiao_info(stock_num[1])
+                    if return_value != None:
+                        (prePrice, price, time) = return_value
+                        prePrice = float(prePrice)
+                        price = float(price)
+                        if price - prePrice > 0:
+                            up_down_percent_num = str((price -prePrice) / prePrice * 100 + 0.005)[0:4]
+                            up_down_percent = str((price -prePrice) / prePrice * 100 + 0.005)[0:4] + '%'
+                            up_down_value = str(price - prePrice + 0.005)[0:4]
+                        else:
+                            up_down_percent_num = up_down_percent = str((price -prePrice) / prePrice * 100 - 0.005)[0:5]
+                            up_down_percent = str((price -prePrice) / prePrice * 100 - 0.005)[0:5] + '%'
+                            up_down_value = str(price - prePrice - 0.005)[0:5]
+                        value = str(price)
+                        stock_list_dict["stock_name_1"] = name_1
+                        stock_list_dict["up_down_percent_1"] = up_down_percent
+                        float_up_down_1 = float(up_down_percent_num)
+                else:
+                    continue
+                stock_num=get_stock_num_by_name(name_2)
+                if stock_num != None:
+                    return_value = get_gupiao_info(stock_num[1])
+                if return_value != None:
+                    (prePrice, price, time) = return_value
+                    prePrice = float(prePrice)
+                    price = float(price)
+                    if price - prePrice > 0:
+                        up_down_percent_num = str((price -prePrice) / prePrice * 100 + 0.005)[0:4]
+                        up_down_percent = str((price -prePrice) / prePrice * 100 + 0.005)[0:4] + '%'
+                        up_down_value = str(price - prePrice + 0.005)[0:4]
+                    else:
+                        up_down_percent_num = up_down_percent = str((price -prePrice) / prePrice * 100 - 0.005)[0:5]
+                        up_down_percent = str((price -prePrice) / prePrice * 100 - 0.005)[0:5] + '%'
+                        up_down_value = str(price - prePrice - 0.005)[0:5]
+                    value = str(price)
+                    stock_list_dict["stock_name_2"] = name_2
+                    stock_list_dict["up_down_percent_2"] = up_down_percent
+                    float_up_down_2 = float(up_down_percent_num)
+                else:
+                    continue
+                notify = self.ui.get_compare_notify_value(name_1, name_2)
+                limit = self.ui.get_compare_limit_value(name_1, name_2)
+                try:
+                    notify = float(notify)
+                except:
+                    stock_list.append(stock_list_dict)
+                    continue
+                if notify == 1:
+                    try:
+                        limit = float(limit)
+                        if (abs(float_up_down_2 - float_up_down_1) > abs(limit)) and (limit != 0):
+                            #  notify_user_message(stock_list_dict["stock_name"], float_up_down, limit, notify_method)
+                            compare_notify(name_1 + name_2, name_1 + stock_list_dict["up_down_percent_1"] + name_2 + stock_list_dict["up_down_percent_2"], "mail")
+                            stock_list_dict["color"] = "red"
+                    except:
+                        pass
+                stock_list.append(stock_list_dict)
+        self.ui.update_compare_stock_info(stock_list)
     def start_get_info(self):
         stock_list = []
         with open("stock_pool.txt", "r") as f:
@@ -244,15 +339,16 @@ class MyWidgets(QWidget):
             os.system("sleep 3")
             self._update()
     def start(self):
-        self.running_cnt = self.running_cnt + 1
-        print("running the programme......running count:", self.running_cnt)
         self._update()
     def _set_count(self):
+        self.running_cnt = self.running_cnt + 1
+        #  print("running the programme......running count:", self.running_cnt)
         if is_deal_time_now() == False:
             pass
         else:
             self.start_get_zs_info()
             self.start_get_info()
+            self.get_compare_info()
 
     def save_signal_slot(self, some_message):
         print("call signal slot here")
