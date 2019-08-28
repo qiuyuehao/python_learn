@@ -92,13 +92,13 @@ def notify_user_message(name, up_down_value, other_info, method):
     if method == "wechat":
         send_wechat_msg_to_myself(tmp_content)
     elif method == "mail":
-        pass
-        #send_mail_to_myself(tmp_content, "no content")
+        #  pass
+        send_mail_to_myself(tmp_content, "no content")
     else:
         pass
         #print(tmp_content)
 
 def update_notify_value(message_id):
     global message_notify_already
-    print("call update_notify_value message_id", message_id)
+    #  print("call update_notify_value message_id", message_id)
     message_notify_already[message_id] = 0

@@ -164,7 +164,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         #  self.pushButton.setText(_translate("MainWindow", "start"))
-        self.pushButton_2.setText(_translate("MainWindow", "close"))
+        self.pushButton_2.setText(_translate("MainWindow", "restart"))
         self.pushButton_3.setText(_translate("MainWindow", "edit"))
         self.pushButton_4.setText(_translate("MainWindow", "saveConfig"))
         MainWindow.setWindowTitle(_translate("MainWindow", "qyh_stock_programme"))

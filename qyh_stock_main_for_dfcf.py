@@ -23,6 +23,7 @@ class MyEditWindow(QMainWindow):
         self.ui = EditWindow()
         self.ui.setupUi(self)
     def open(self):
+        self.ui.open_file_all()
         self.show()
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Escape:
@@ -53,11 +54,16 @@ class MyWidgets(QWidget):
            t.start()
         except:
             print("init start fail")
+        try:
+           t = threading.Thread(target=self.update_info_to_ui)
+           t.start()
+        except:
+            print("init 2 start fail")
         self.start()
     def closeEvent(self, event):
         event.accept()
         print("kill the programme")
-        self.close()
+        os.system('killall -9 qyh_stock_main_for_dfcf.py')
     def update_info_to_ui(self):
         thread_list = []
         t = threading.Thread(target=self.start_get_zs_info)
@@ -101,6 +107,7 @@ class MyWidgets(QWidget):
         #edit_w.setupUi(self)
         #edit_w.exec()
     def close(self):
+        os.system('(sleep 1;./qyh_stock_main_for_dfcf.py)&')
         os.system('killall -9 qyh_stock_main_for_dfcf.py')
     def start_get_zs_info(self):
         #print(len(zs_list))
