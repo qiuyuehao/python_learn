@@ -11,7 +11,7 @@ message_notify_already = {}
 notify_time = 60 * 30
 pre_date_day = 0
 #  debug = False
-debug = True
+debug = False
 
 
 def compare_notify(name, tmp_str, method):
@@ -58,7 +58,7 @@ def is_deal_time_now():
     if debug == True:
         return True
     time_now = time.localtime()
-    if (time_now.tm_hour == 9) and (time_now.tm_min >= 15):
+    if (time_now.tm_hour == 9) and (time_now.tm_min >= 20):
         return True
     if (time_now.tm_hour == 10):
         return True

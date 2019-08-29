@@ -29,7 +29,7 @@ def get_dfcfgupiao(stock_num):
         #url_addr = url + "&secid=1." + stock_num
         return None
     try:
-        #print(url_addr)
+        print(url_addr)
         r = requests.get(url_addr, headers={
             'User-Agent': UserAgent().random
         }, timeout = 20)
@@ -55,11 +55,15 @@ def get_gupiao_info(stock_num):
     details = json_data['data']['details']
     length = len(details)
 
+    if length == 0:
+        price = prePrice
+        time = "not open deal time"
+    else:
     #print(json_data['data']['prePrice'])
     #print(len(json_data['data']['details']))
     #print(json_data['data']['details'][len(json_data['data']['details'])-1])
-    price = details[length - 1].split(',')[1]
-    time = details[length - 1].split(',')[0]
+        price = details[length - 1].split(',')[1]
+        time = details[length - 1].split(',')[0]
     #print(prePrice, price, time)
     return (prePrice, price, time)
     #soup = BeautifulSoup(html, 'html.parser')
@@ -78,7 +82,7 @@ def get_gupiao_info(stock_num):
         #print(detail_info[0].string)
         #print(detail_info[1].string)
         #return (result_1.strong.string, detail_info[0].string, detail_info[1].string)
-    
+
 #上证指数https://gupiao.baidu.com/tpl/betsInfo?from=pc&os_ver=1&cuid=xxx&vv=100&format=json&code=sh000001
 def get_szzs():
     url_szzs="https://gupiao.baidu.com/tpl/betsInfo?from=pc&os_ver=1&cuid=xxx&vv=100&format=json&code=sh000001"
@@ -111,4 +115,4 @@ if __name__ == '__main__':
         #print(result.strong.string)
         #detail_info = result.find_all("span")
         #print(detail_info[1].string)
-            
+
