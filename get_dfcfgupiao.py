@@ -29,7 +29,7 @@ def get_dfcfgupiao(stock_num):
         #url_addr = url + "&secid=1." + stock_num
         return None
     try:
-        print(url_addr)
+        #  print(url_addr)
         r = requests.get(url_addr, headers={
             'User-Agent': UserAgent().random
         }, timeout = 20)
