@@ -86,9 +86,9 @@ def notify_user_message(name, up_down_value, other_info, method):
     else:
         method = None
     if up_down_value > 0:
-        tmp_content = name + "good news  +++  " + str(up_down_value) + "   other information:" +str(other_info)
+        tmp_content = name + "good news  上涨了 " + str(up_down_value) + "   other information:" +str(other_info)
     else:
-        tmp_content = name + "bad news  --- " + str(up_down_value) + "   other information:" +str(other_info)
+        tmp_content = name + "bad news 下跌了 " + str(up_down_value) + "   other information:" +str(other_info)
     if method == "wechat":
         send_wechat_msg_to_myself(tmp_content)
     elif method == "mail":

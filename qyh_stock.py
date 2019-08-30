@@ -88,6 +88,7 @@ class Ui_MainWindow(object):
             self.gridLayout_3.addWidget(ui_list_dict["upper"], i, 6, 1, 1)
             self.gridLayout_3.addWidget(ui_list_dict["lower"], i, 7, 1, 1)
             self.ui_list.append(ui_list_dict)
+        self.ui_list[0]["limit"].textChanged.connect(self.stock_line_edit_changed)
         self.widget2 = QtWidgets.QWidget(self.centralwidget)
         self.widget2.setGeometry(QtCore.QRect(30, 430, 592, 351))
         self.widget2.setObjectName("widget2")
@@ -256,6 +257,8 @@ class Ui_MainWindow(object):
             self.zs_list[i]["up_down_percent"].setVisible(can_see)
             self.zs_list[i]["notify"].setVisible(can_see)
             self.zs_list[i]["limit"].setVisible(can_see)
+    def stock_line_edit_changed(self, text_change):
+        print("text change to", text_change)
     def update_stock_info(self, stock_info):
         stock_len = len(stock_info)
         len_ui_list = len(self.ui_list)
@@ -307,7 +310,7 @@ class Ui_MainWindow(object):
                 can_see = False
             self.ui_list[i]["value"].setVisible(can_see)
             self.ui_list[i]["stock_name"].setVisible(can_see)
-            self.ui_list[i]["up_down_value"].setVisible(can_see)
+            self.ui_list[i]["up_down_value"].setVisible(False)
             self.ui_list[i]["up_down_percent"].setVisible(can_see)
             self.ui_list[i]["notify"].setVisible(can_see)
             self.ui_list[i]["limit"].setVisible(can_see)

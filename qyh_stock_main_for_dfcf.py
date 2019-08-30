@@ -254,6 +254,8 @@ class MyWidgets(QWidget):
                         stock_list_dict["stock_name_1"] = name_1
                         stock_list_dict["up_down_percent_1"] = up_down_percent
                         float_up_down_1 = float(up_down_percent_num)
+                    else:
+                        continue
                 else:
                     continue
                 stock_num=get_stock_num_by_name(name_2)
@@ -305,7 +307,10 @@ class MyWidgets(QWidget):
                     line = re.sub(' +', ' ', line)
                     line_info = line.split(" ")
                 name = line_info[0]
-                stock_num=get_stock_num_by_name(name)
+                if name.isdigit():
+                    stock_num = (name, name)
+                else:
+                    stock_num=get_stock_num_by_name(name)
                 if stock_num != None:
                     return_value = get_gupiao_info(stock_num[1])
                     if return_value != None:
