@@ -54,11 +54,11 @@ class MyWidgets(QWidget):
            t.start()
         except:
             print("init start fail")
-        try:
-           t = threading.Thread(target=self.update_info_to_ui)
-           t.start()
-        except:
-            print("init 2 start fail")
+        #  try:
+           #  t = threading.Thread(target=self.update_info_to_ui)
+           #  t.start()
+        #  except:
+            #  print("init 2 start fail")
         self.start()
     def closeEvent(self, event):
         event.accept()
@@ -372,25 +372,22 @@ class MyWidgets(QWidget):
         self.ui.update_stock_info(stock_list)
     def _update(self):
         try:
-            self._set_count()
-            update_notify_when_new_day()
+            self.main_do_things()
             threading.Timer(1, self._update).start()
         except:
             print("something wrong happens, do the update again")
-            os.system("sleep 3")
+            time.sleep(3)
             self._update()
     def start(self):
         threading.Timer(1, self._update).start()
-    def _set_count(self):
+    def main_do_things(self):
         self.running_cnt = self.running_cnt + 1
+        update_notify_when_new_day()
         #  print("running the programme......running count:", self.running_cnt)
         if is_deal_time_now() == False:
             pass
         else:
-            #  self.start_get_zs_info()
             self.update_info_to_ui()
-            #  self.start_get_info()
-            #  self.get_compare_info()
 
     def save_signal_slot(self, some_message):
         self.get_and_update_init_stock_info()

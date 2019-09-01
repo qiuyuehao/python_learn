@@ -5,6 +5,7 @@
 import sys, time, threading
 import urllib.request
 import os, re
+import datetime
 from send_mail import send_mail_to_myself
 from send_wechat_msg import send_wechat_msg_to_myself
 message_notify_already = {}
@@ -55,8 +56,16 @@ def update_stock_notify():
     for kv in message_notify_already:
         message_notify_already[kv] = 1
 def is_deal_time_now():
+    global debug
     if debug == True:
         return True
+    now = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
+    if now.weekday() == 6:
+        return False
+    elif now.weekday() == 5:
+        return False
+    else:
+        pass
     time_now = time.localtime()
     if (time_now.tm_hour == 9) and (time_now.tm_min >= 20):
         return True
@@ -100,5 +109,4 @@ def notify_user_message(name, up_down_value, other_info, method):
 
 def update_notify_value(message_id):
     global message_notify_already
-    #  print("call update_notify_value message_id", message_id)
     message_notify_already[message_id] = 0
