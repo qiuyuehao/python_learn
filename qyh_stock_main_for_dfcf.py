@@ -13,6 +13,7 @@ import os, re
 from edit import EditWindow
 from edit import Communicate
 from basic_function import *
+from get_weibo import send_weibo_mail_on_time
 
 
 notify_method = "mail"
@@ -48,6 +49,11 @@ class MyWidgets(QWidget):
         #self.ui.pushButton_3.clicked.connect(self.edit)
         #  t = threading.Thread(target=self.get_and_update_init_stock_info)
         #  t.start()
+        try:
+           t = threading.Thread(target=send_weibo_mail_on_time)
+           t.start()
+        except:
+            print("init send weibo mail fail")
         self.get_and_update_init_stock_info()
         try:
            t = threading.Thread(target=self.update_info_to_ui)
