@@ -47,6 +47,8 @@ class Ui_MainWindow(object):
         self.gridLayout.setContentsMargins(3, 3, 3, 3)
         self.gridLayout.setSpacing(5)
         self.gridLayout.setObjectName("gridLayout")
+
+
         for i in range(0, self.zs_display_per_page):
             ui_list_dict = {}
             ui_list_dict["stock_name"] = QtWidgets.QLabel(self.widget)
@@ -65,10 +67,35 @@ class Ui_MainWindow(object):
         self.widget1.setGeometry(QtCore.QRect(30, 150, 572, 351))
         self.widget1.setObjectName("widget1")
         self.gridLayout_3 = QtWidgets.QGridLayout(self.widget1)
-        self.gridLayout_3.setContentsMargins(10, 10, 10, 10)
+        #self.gridLayout_3.setContentsMargins(10, 10, 10, 10)
         self.gridLayout_3.setObjectName("gridLayout_3")
-        self.gridLayout_3.setSpacing(10)
-        for i in range(0, self.display_per_page):
+        #self.gridLayout_3.setSpacing(10)
+
+        ui_stock_name = QtWidgets.QLabel(self.widget)
+        ui_up_down_value = QtWidgets.QLabel(self.widget)
+        ui_up_down_percent = QtWidgets.QLabel(self.widget)
+        ui_value = QtWidgets.QLabel(self.widget)
+        ui_up_notify = QtWidgets.QLabel(self.widget)
+        ui_up_limit = QtWidgets.QLabel(self.widget)
+        ui_up_value_limit = QtWidgets.QLabel(self.widget)
+        ui_down_value_limit = QtWidgets.QLabel(self.widget)
+        ui_stock_name.setText("名称")
+        ui_up_down_value.setText("涨跌")
+        ui_up_down_percent.setText("涨跌幅")
+        ui_value.setText("价格")
+        ui_up_notify.setText("是否通知")
+        ui_up_limit.setText("通知幅度")
+        ui_up_value_limit.setText("价格上限")
+        ui_down_value_limit.setText("价格下限")
+        self.gridLayout_3.addWidget(ui_stock_name, 0, 0, 1, 1)
+        self.gridLayout_3.addWidget(ui_up_down_value, 0, 1, 1, 1)
+        self.gridLayout_3.addWidget(ui_up_down_percent, 0, 2, 1, 1)
+        self.gridLayout_3.addWidget(ui_value, 0, 3, 1, 1)
+        self.gridLayout_3.addWidget(ui_up_notify, 0, 4, 1, 1)
+        self.gridLayout_3.addWidget(ui_up_limit, 0, 5, 1, 1)
+        self.gridLayout_3.addWidget(ui_up_value_limit, 0, 6, 1, 1)
+        self.gridLayout_3.addWidget(ui_down_value_limit, 0, 7, 1, 1)
+        for i in range(1, self.display_per_page + 1):
             ui_list_dict = {}
             ui_list_dict["stock_name"] = QtWidgets.QLabel(self.widget1)
             ui_list_dict["up_down_value"] = QtWidgets.QLabel(self.widget1)
@@ -89,6 +116,24 @@ class Ui_MainWindow(object):
             self.gridLayout_3.addWidget(ui_list_dict["lower"], i, 7, 1, 1)
             self.ui_list.append(ui_list_dict)
         self.ui_list[0]["limit"].textChanged.connect(self.stock_line_edit_changed)
+        columnMinimumWidth = 300
+        self.gridLayout_3.setColumnMinimumWidth(0, columnMinimumWidth)
+        self.gridLayout_3.setColumnMinimumWidth(1, columnMinimumWidth)
+        self.gridLayout_3.setColumnMinimumWidth(2, columnMinimumWidth)
+        self.gridLayout_3.setColumnMinimumWidth(3, columnMinimumWidth)
+        self.gridLayout_3.setColumnMinimumWidth(4, columnMinimumWidth)
+        self.gridLayout_3.setColumnMinimumWidth(5, columnMinimumWidth)
+        self.gridLayout_3.setColumnMinimumWidth(6, columnMinimumWidth)
+
+
+        self.gridLayout_3.setRowMinimumHeight(0, 10)
+        self.gridLayout_3.setRowMinimumHeight(1, 10)
+        self.gridLayout_3.setRowMinimumHeight(2, 10)
+        self.gridLayout_3.setRowMinimumHeight(3, 10)
+        self.gridLayout_3.setRowMinimumHeight(4, 10)
+        self.gridLayout_3.setRowMinimumHeight(5, 10)
+
+
         self.widget2 = QtWidgets.QWidget(self.centralwidget)
         self.widget2.setGeometry(QtCore.QRect(30, 430, 592, 351))
         self.widget2.setObjectName("widget2")
@@ -310,7 +355,7 @@ class Ui_MainWindow(object):
                 can_see = False
             self.ui_list[i]["value"].setVisible(can_see)
             self.ui_list[i]["stock_name"].setVisible(can_see)
-            self.ui_list[i]["up_down_value"].setVisible(False)
+            self.ui_list[i]["up_down_value"].setVisible(can_see)
             self.ui_list[i]["up_down_percent"].setVisible(can_see)
             self.ui_list[i]["notify"].setVisible(can_see)
             self.ui_list[i]["limit"].setVisible(can_see)
