@@ -111,7 +111,7 @@ def get_weibo(id,file):
                                 pic_urls.append(pic_url)
                         with open(file,'a',encoding='utf-8') as fh:
                             if len(str(created_at)) < 6:
-                                created_at = '2019-'+ str(created_at)
+                                created_at = '2020-'+ str(created_at)
                                 # 页数、条数、微博地址、发布时间、微博内容、点赞数、评论数、转发数、图片链接
                                 #  fh.write(str(i)+'\t'+str(j)+'\t'+str(scheme)+'\t'+str(created_at)+'\t'+text+'\t'+str(attitudes_count)+'\t'+str(comments_count)+'\t'+str(reposts_count)+'\t'+str(pic_urls)+'\n')
                 # 保存图片
@@ -183,7 +183,7 @@ def send_weibo_to_mail():
     os.system("cat %s >> weibo.txt"  % (file))
     os.system("echo '\n\n\nbubai:' >> weibo.txt")
     os.system("cat %s >> weibo.txt"  % (file2))
-    os.syste?!?jedi=1, m("cat weibo.tx?!? (*_*command*_*) ?!?jedi?!?"t | mutt -s '新闻信息早读' scutqyh@163.com")
+    os.system("cat weibo.txt | mutt -s '新闻信息早读' scutqyh@163.com")
     os.system("rm -rf weibo.txt bubai.txt guxia.txt")
     print('finish')
 
