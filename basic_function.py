@@ -12,7 +12,7 @@ message_notify_already = {}
 notify_time = 60 * 30
 pre_date_day = 0
 #  debug = False
-debug = False
+debug = True
 
 
 def compare_notify(name, tmp_str, method):

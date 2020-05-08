@@ -147,18 +147,19 @@ class MyWidgets(QWidget):
                     zs_stock_info["value"] = value
                     zs_stock_info["up_down_percent"] = up_down_percent_result
                     float_up_down = float(up_down_percent)
-                    notify = str(self.ui.get_zs_notify_value(zs_stock_info["stock_name"]))
+                    notify = self.ui.get_zs_notify_value(zs_stock_info["stock_name"])
+                    zs_stock_info["notify"] = notify
+                    #print("notify ", zs_stock_info["stock_name"], notify)
                     limit = str(self.ui.get_zs_limit_value(zs_stock_info["stock_name"]))
                     cnt = cnt + 1
-                    try:
-                        notify = float(notify)
-                        limit = float(limit)
-                    except:
-                        zs_info_list.append(zs_stock_info)
-                        continue
-                    if (abs(float_up_down) > abs(limit)) and (notify == 1) and (limit != 0):
-                        zs_stock_info["color"] = "red"
-                        notify_user_message(zs_stock_info["stock_name"], float_up_down, limit, notify_method)
+                    if notify == True:
+                        try:
+                            limit = float(limit)
+                            if (abs(float_up_down) > abs(limit)) and (notify == true) and (limit != 0):
+                                zs_stock_info["color"] = "red"
+                                notify_user_message(zs_stock_info["stock_name"], float_up_down, limit, notify_method)
+                        except:
+                            pass
                     zs_info_list.append(zs_stock_info)
         self.ui.update_zs_stock_info(zs_info_list)
     def get_and_update_init_stock_info(self):
@@ -175,15 +176,20 @@ class MyWidgets(QWidget):
                 stock_list_dict["up_down_percent"] = "unknow"
                 stock_list_dict["up_down_value"] = "unknow"
                 stock_list_dict["value"] = "unknow"
+                stock_list_dict["notify"] = False
                 if len(line_info) == 2:
-                    stock_list_dict["notify"] = "1"
                     stock_list_dict["limit"] = line_info[1]
+                    try:
+                        if float(stock_list_dict["limit"]) != 0:
+                            stock_list_dict["notify"] = True
+                    except:
+                        pass
                 if len(line_info) == 3:
-                    stock_list_dict["notify"] = "1"
+                    stock_list_dict["notify"] = True
                     stock_list_dict["limit"] = line_info[1]
                     stock_list_dict["upper"] = line_info[2]
                 if len(line_info) == 4:
-                    stock_list_dict["notify"] = "1"
+                    stock_list_dict["notify"] = True
                     stock_list_dict["limit"] = line_info[1]
                     stock_list_dict["upper"] = line_info[2]
                     stock_list_dict["lower"] = line_info[3]
@@ -202,8 +208,9 @@ class MyWidgets(QWidget):
                 stock_list_dict["stock_name"] = line_info[0]
                 stock_list_dict["up_down_percent"] = "unknow"
                 stock_list_dict["value"] = "unknow"
+                stock_list_dict["notify"] = False
                 if len(line_info) == 2:
-                    stock_list_dict["notify"] = "1"
+                    stock_list_dict["notify"] = True
                     stock_list_dict["limit"] = line_info[1]
                 stock_list.append(stock_list_dict)
         self.ui.update_zs_stock_info(stock_list)
@@ -222,8 +229,9 @@ class MyWidgets(QWidget):
                 stock_list_dict["up_down_percent_1"] = "unknow"
                 stock_list_dict["stock_name_2"] = line_info[1]
                 stock_list_dict["up_down_percent_2"] = "unknow"
+                stock_list_dict["notify"] = False
                 if len(line_info) == 3:
-                    stock_list_dict["notify"] = "1"
+                    stock_list_dict["notify"] = True
                     stock_list_dict["limit"] = line_info[2]
                 stock_list.append(stock_list_dict)
         self.ui.update_compare_stock_info(stock_list)
@@ -287,12 +295,7 @@ class MyWidgets(QWidget):
                     continue
                 notify = self.ui.get_compare_notify_value(name_1, name_2)
                 limit = self.ui.get_compare_limit_value(name_1, name_2)
-                try:
-                    notify = float(notify)
-                except:
-                    stock_list.append(stock_list_dict)
-                    continue
-                if notify == 1:
+                if notify == True:
                     try:
                         limit = float(limit)
                         if (abs(float_up_down_2 - float_up_down_1) > abs(limit)) and (limit != 0):
@@ -343,13 +346,7 @@ class MyWidgets(QWidget):
                         upper_value = self.ui.get_upper_value_by_name(name)
                         lower_value = self.ui.get_lower_value_by_name(name)
                         stock_count = stock_count + 1
-                        try:
-                            notify = float(notify)
-                        except:
-                            #print("notifty exception here")
-                            stock_list.append(stock_list_dict)
-                            continue
-                        if (notify == 1):
+                        if (notify == True):
                             try:
                                 limit = float(limit)
                                 if (abs(float_up_down) > abs(limit)) and (limit != 0):
@@ -396,6 +393,7 @@ class MyWidgets(QWidget):
             self.update_info_to_ui()
 
     def save_signal_slot(self, some_message):
+        print("save signal", some_message)
         self.get_and_update_init_stock_info()
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Escape:
@@ -411,6 +409,7 @@ if __name__=='__main__':
     edit_w = MyEditWindow()
     w.ui.pushButton_3.clicked.connect(edit_w.open)
     edit_w.ui.c.save_signal.connect(w.save_signal_slot)
+    #w.ui.c.w_save_signal(w.save_signal_slot)
     w.show()
     sys.exit(app.exec_())
 

@@ -11,6 +11,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QIcon
 
 init_valid_cnt = 3
+
+#class Communicate(QObject):
+    #w_save_signal = pyqtSignal(str)
+
 class Ui_MainWindow(object):
     display_per_page = 7
     zs_display_per_page = 5
@@ -21,7 +25,10 @@ class Ui_MainWindow(object):
     valid_zs_cnt = 0
     compare_list = []
     valid_compare_cnt = 0
+    c = None
     def setupUi(self, MainWindow):
+        #self.c = Communicate()
+        self.c = MainWindow
         MainWindow.setObjectName("qyh_stock_win")
         MainWindow.resize(778, 851)
         MainWindow.setWindowIcon(QIcon('sea.jpg'))
@@ -54,7 +61,9 @@ class Ui_MainWindow(object):
             ui_list_dict["stock_name"] = QtWidgets.QLabel(self.widget)
             ui_list_dict["value"] = QtWidgets.QLabel(self.widget)
             ui_list_dict["up_down_percent"] = QtWidgets.QLabel(self.widget)
-            ui_list_dict["notify"] = QtWidgets.QLineEdit(self.widget)
+            ui_list_dict["notify"] = QtWidgets.QCheckBox("notify", self.widget)
+            ui_list_dict["notify"].setTristate(False)
+            ui_list_dict["notify"].setChecked(False)
             ui_list_dict["limit"] = QtWidgets.QLineEdit(self.widget)
             ui_list_dict["valid_cnt"] = 0
             self.gridLayout.addWidget(ui_list_dict["stock_name"], 0, i, 1, 1)
@@ -101,7 +110,8 @@ class Ui_MainWindow(object):
             ui_list_dict["up_down_value"] = QtWidgets.QLabel(self.widget1)
             ui_list_dict["up_down_percent"] = QtWidgets.QLabel(self.widget1)
             ui_list_dict["value"] = QtWidgets.QLabel(self.widget1)
-            ui_list_dict["notify"] = QtWidgets.QLineEdit(self.widget1)
+            ui_list_dict["notify"] = QtWidgets.QCheckBox("notify", self.widget)
+            ui_list_dict["notify"].setTristate(False)
             ui_list_dict["limit"] = QtWidgets.QLineEdit(self.widget1)
             ui_list_dict["upper"] = QtWidgets.QLineEdit(self.widget)
             ui_list_dict["lower"] = QtWidgets.QLineEdit(self.widget)
@@ -147,7 +157,8 @@ class Ui_MainWindow(object):
             ui_list_dict["up_down_percent_1"] = QtWidgets.QLabel(self.widget1)
             ui_list_dict["stock_name_2"] = QtWidgets.QLabel(self.widget1)
             ui_list_dict["up_down_percent_2"] = QtWidgets.QLabel(self.widget1)
-            ui_list_dict["notify"] = QtWidgets.QLineEdit(self.widget1)
+            ui_list_dict["notify"] = QtWidgets.QCheckBox("notify", self.widget)
+            ui_list_dict["notify"].setTristate(False)
             ui_list_dict["limit"] = QtWidgets.QLineEdit(self.widget1)
             ui_list_dict["valid_cnt"] = 0
             self.gridLayout_4.addWidget(ui_list_dict["stock_name_1"], i, 0, 1, 1)
@@ -163,7 +174,7 @@ class Ui_MainWindow(object):
         if len(self.compare_list) != 0:
             for i in range(0, len(self.compare_list)):
                 if (name1 == self.compare_list[i]["stock_name_1"].text()) and (name2 == self.compare_list[i]["stock_name_2"].text()):
-                    return self.compare_list[i]["notify"].text()
+                    return self.compare_list[i]["notify"].isChecked()
         return None
     def get_compare_limit_value(self, name1, name2):
         if len(self.compare_list) != 0:
@@ -175,7 +186,7 @@ class Ui_MainWindow(object):
         if len(self.zs_list) != 0:
             for i in range(0, len(self.zs_list)):
                 if name == self.zs_list[i]["stock_name"].text():
-                    return self.zs_list[i]["notify"].text()
+                    return self.zs_list[i]["notify"].isChecked()
         return None
     def get_zs_limit_value(self, name):
         if len(self.zs_list) != 0:
@@ -199,7 +210,7 @@ class Ui_MainWindow(object):
         if len(self.ui_list) != 0:
             for i in range(0, len(self.ui_list)):
                 if name == self.ui_list[i]["stock_name"].text():
-                    return self.ui_list[i]["notify"].text()
+                    return self.ui_list[i]["notify"].isChecked()
         return None
     def get_limit_value_by_name(self, name):
         if len(self.ui_list) != 0:
@@ -224,7 +235,7 @@ class Ui_MainWindow(object):
                     self.compare_list[j]["up_down_percent_1"].setText(stock_info[i]["up_down_percent_1"])
                     self.compare_list[j]["up_down_percent_2"].setText(stock_info[i]["up_down_percent_2"])
                     if "notify" in stock_info[i].keys():
-                        self.compare_list[j]["notify"].setText(stock_info[i]["notify"])
+                            self.compare_list[j]["notify"].setChecked(stock_info[i]["notify"])
                     if "limit" in stock_info[i].keys():
                         self.compare_list[j]["limit"].setText(stock_info[i]["limit"])
                     if "color" in stock_info[i].keys():
@@ -240,7 +251,7 @@ class Ui_MainWindow(object):
                 self.compare_list[self.valid_compare_cnt]["stock_name_2"].setText(stock_info[i]["stock_name_2"])
                 self.compare_list[self.valid_compare_cnt]["up_down_percent_2"].setText(stock_info[i]["up_down_percent_2"])
                 if "notify" in stock_info[i].keys():
-                        self.compare_list[self.valid_compare_cnt]["notify"].setText(stock_info[i]["notify"])
+                        self.compare_list[self.valid_compare_cnt]["notify"].setChecked(stock_info[i]["notify"])
                 if "limit" in stock_info[i].keys():
                     self.compare_list[self.valid_compare_cnt]["limit"].setText(stock_info[i]["limit"])
                 self.compare_list[self.valid_compare_cnt]["valid_cnt"] = init_valid_cnt
@@ -270,7 +281,8 @@ class Ui_MainWindow(object):
                     #self.zs_list[i]["up_down_value"].setText(stock_info[i]["up_down_value"])
                     self.zs_list[j]["up_down_percent"].setText(stock_info[i]["up_down_percent"])
                     if "notify" in stock_info[i].keys():
-                        self.zs_list[j]["notify"].setText(stock_info[i]["notify"])
+                        #print("noitfy in keys, and set the checkState", stock_info[i]["notify"])
+                        self.zs_list[j]["notify"].setChecked(stock_info[i]["notify"])
                     if "limit" in stock_info[i].keys():
                         self.zs_list[j]["limit"].setText(stock_info[i]["limit"])
                     if "color" in stock_info[i].keys():
@@ -285,7 +297,7 @@ class Ui_MainWindow(object):
                 self.zs_list[self.valid_zs_cnt]["up_down_percent"].setText(stock_info[i]["up_down_percent"])
                 self.zs_list[self.valid_zs_cnt]["value"].setText(stock_info[i]["value"])
                 if "notify" in stock_info[i].keys():
-                        self.zs_list[self.valid_zs_cnt]["notify"].setText(stock_info[i]["notify"])
+                        self.zs_list[self.valid_zs_cnt]["notify"].setChecked(stock_info[i]["notify"])
                 if "limit" in stock_info[i].keys():
                     self.zs_list[self.valid_zs_cnt]["limit"].setText(stock_info[i]["limit"])
                 self.zs_list[self.valid_zs_cnt]["valid_cnt"] = init_valid_cnt
@@ -303,7 +315,8 @@ class Ui_MainWindow(object):
             self.zs_list[i]["notify"].setVisible(can_see)
             self.zs_list[i]["limit"].setVisible(can_see)
     def stock_line_edit_changed(self, text_change):
-        print("text change to", text_change)
+        #print("text change to", text_change)
+        pass
     def update_stock_info(self, stock_info):
         stock_len = len(stock_info)
         len_ui_list = len(self.ui_list)
@@ -316,7 +329,7 @@ class Ui_MainWindow(object):
                     self.ui_list[i]["up_down_value"].setText(stock_info[i]["up_down_value"])
                     self.ui_list[j]["up_down_percent"].setText(stock_info[i]["up_down_percent"])
                     if "notify" in stock_info[i].keys():
-                        self.ui_list[j]["notify"].setText(stock_info[i]["notify"])
+                        self.ui_list[j]["notify"].setChecked(stock_info[i]["notify"])
                     if "limit" in stock_info[i].keys():
                         self.ui_list[j]["limit"].setText(stock_info[i]["limit"])
                     if "upper" in stock_info[i].keys():
@@ -338,7 +351,7 @@ class Ui_MainWindow(object):
                 self.ui_list[self.valid_stock_cnt]["value"].setText(stock_info[i]["value"])
                 self.ui_list[self.valid_stock_cnt]["valid_cnt"] = init_valid_cnt
                 if "notify" in stock_info[i].keys():
-                        self.ui_list[self.valid_stock_cnt]["notify"].setText(stock_info[i]["notify"])
+                        self.ui_list[self.valid_stock_cnt]["notify"].setChecked(stock_info[i]["notify"])
                 if "limit" in stock_info[i].keys():
                     self.ui_list[self.valid_stock_cnt]["limit"].setText(stock_info[i]["limit"])
                 if "upper" in stock_info[i].keys():
@@ -371,10 +384,16 @@ class Ui_MainWindow(object):
                 save_stock_txt_str = save_stock_txt_str + self.ui_list[i]["stock_name"].text()
             if self.ui_list[i]["limit"].text():
                 save_stock_txt_str = save_stock_txt_str + " " + self.ui_list[i]["limit"].text()
-                if self.ui_list[i]["upper"].text():
-                    save_stock_txt_str = save_stock_txt_str + " " + self.ui_list[i]["upper"].text()
-                if self.ui_list[i]["lower"].text():
-                    save_stock_txt_str = save_stock_txt_str + " " + self.ui_list[i]["lower"].text()
+            else:
+                save_stock_txt_str = save_stock_txt_str + " " + "0"
+            if self.ui_list[i]["upper"].text():
+                save_stock_txt_str = save_stock_txt_str + " " + self.ui_list[i]["upper"].text()
+            else:
+                save_stock_txt_str = save_stock_txt_str + " " + "0"
+            if self.ui_list[i]["lower"].text():
+                save_stock_txt_str = save_stock_txt_str + " " + self.ui_list[i]["lower"].text()
+            else:
+                save_stock_txt_str = save_stock_txt_str + " " + "0"
             if i != self.valid_stock_cnt - 1:
                 save_stock_txt_str = save_stock_txt_str + "\n"
         f = open("stock_pool.txt", "w")
@@ -410,4 +429,6 @@ class Ui_MainWindow(object):
         f = open("monitor_pool.txt", "w")
         f.write(save_stock_txt_str)
         f.close()
+        self.c.save_signal_slot("test call")
+        #self.c.w_save_signal.emit("hello tiger")
 
