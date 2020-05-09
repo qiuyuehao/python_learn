@@ -177,22 +177,16 @@ class MyWidgets(QWidget):
                 stock_list_dict["up_down_value"] = "unknow"
                 stock_list_dict["value"] = "unknow"
                 stock_list_dict["notify"] = False
-                if len(line_info) == 2:
-                    stock_list_dict["limit"] = line_info[1]
+                if len(line_info) == 5:
+                    noitfy = line_info[1]
+                    stock_list_dict["limit"] = line_info[2]
+                    stock_list_dict["upper"] = line_info[3]
+                    stock_list_dict["lower"] = line_info[4]
                     try:
-                        if float(stock_list_dict["limit"]) != 0:
+                        if float(notify) != 0:
                             stock_list_dict["notify"] = True
                     except:
                         pass
-                if len(line_info) == 3:
-                    stock_list_dict["notify"] = True
-                    stock_list_dict["limit"] = line_info[1]
-                    stock_list_dict["upper"] = line_info[2]
-                if len(line_info) == 4:
-                    stock_list_dict["notify"] = True
-                    stock_list_dict["limit"] = line_info[1]
-                    stock_list_dict["upper"] = line_info[2]
-                    stock_list_dict["lower"] = line_info[3]
                 stock_list.append(stock_list_dict)
         self.ui.update_stock_info(stock_list)
         stock_list = []
@@ -209,9 +203,14 @@ class MyWidgets(QWidget):
                 stock_list_dict["up_down_percent"] = "unknow"
                 stock_list_dict["value"] = "unknow"
                 stock_list_dict["notify"] = False
-                if len(line_info) == 2:
-                    stock_list_dict["notify"] = True
-                    stock_list_dict["limit"] = line_info[1]
+                if len(line_info) == 3:
+                    notify = line_info[1]
+                    stock_list_dict["limit"] = line_info[2]
+                try:
+                    if float(notify) != 0:
+                        stock_list_dict["notify"] = True
+                except:
+                    pass
                 stock_list.append(stock_list_dict)
         self.ui.update_zs_stock_info(stock_list)
         stock_list = []
@@ -230,9 +229,14 @@ class MyWidgets(QWidget):
                 stock_list_dict["stock_name_2"] = line_info[1]
                 stock_list_dict["up_down_percent_2"] = "unknow"
                 stock_list_dict["notify"] = False
-                if len(line_info) == 3:
-                    stock_list_dict["notify"] = True
-                    stock_list_dict["limit"] = line_info[2]
+                if len(line_info) == 4:
+                    notify = line_info[2]
+                    stock_list_dict["limit"] = line_info[3]
+                try:
+                    if float(notify) != 0:
+                        stock_list_dict["notify"] = True
+                except:
+                    pass
                 stock_list.append(stock_list_dict)
         self.ui.update_compare_stock_info(stock_list)
     def get_compare_info(self):

@@ -281,7 +281,7 @@ class Ui_MainWindow(object):
                     #self.zs_list[i]["up_down_value"].setText(stock_info[i]["up_down_value"])
                     self.zs_list[j]["up_down_percent"].setText(stock_info[i]["up_down_percent"])
                     if "notify" in stock_info[i].keys():
-                        #print("noitfy in keys, and set the checkState", stock_info[i]["notify"])
+                        #print("noitfy in keys, and set the checkState",stock_info[i]["stock_name"], stock_info[i]["notify"])
                         self.zs_list[j]["notify"].setChecked(stock_info[i]["notify"])
                     if "limit" in stock_info[i].keys():
                         self.zs_list[j]["limit"].setText(stock_info[i]["limit"])
@@ -382,6 +382,10 @@ class Ui_MainWindow(object):
                 save_stock_txt_str = self.ui_list[i]["stock_name"].text()
             else:
                 save_stock_txt_str = save_stock_txt_str + self.ui_list[i]["stock_name"].text()
+            if self.ui_list[i]["notify"].isChecked():
+                save_stock_txt_str = save_stock_txt_str + " " + "1"
+            else:
+                save_stock_txt_str = save_stock_txt_str + " " + "0"
             if self.ui_list[i]["limit"].text():
                 save_stock_txt_str = save_stock_txt_str + " " + self.ui_list[i]["limit"].text()
             else:
@@ -407,8 +411,14 @@ class Ui_MainWindow(object):
                 save_stock_txt_str = self.zs_list[i]["stock_name"].text()
             else:
                 save_stock_txt_str = save_stock_txt_str + self.zs_list[i]["stock_name"].text()
+            if self.zs_list[i]["notify"].isChecked():
+                save_stock_txt_str = save_stock_txt_str + " " + "1"
+            else:
+                save_stock_txt_str = save_stock_txt_str + " " + "0"
             if self.zs_list[i]["limit"].text():
                 save_stock_txt_str = save_stock_txt_str + " " + self.zs_list[i]["limit"].text()
+            else:
+                save_stock_txt_str = save_stock_txt_str + " " + "0"
             if i != self.valid_zs_cnt - 1:
                 save_stock_txt_str = save_stock_txt_str + "\n"
         f = open("zs_pool.txt", "w")
@@ -422,8 +432,14 @@ class Ui_MainWindow(object):
                 save_stock_txt_str = self.compare_list[i]["stock_name_1"].text() + ' ' + self.compare_list[i]["stock_name_2"].text()
             else:
                 save_stock_txt_str = save_stock_txt_str + self.compare_list[i]["stock_name_1"].text() + ' ' + self.compare_list[i]["stock_name_2"].text()
+            if self.compare_list[i]["notify"].isChecked():
+                save_stock_txt_str = save_stock_txt_str + " " + "1"
+            else:
+                save_stock_txt_str = save_stock_txt_str + " " + "0"
             if self.compare_list[i]["limit"].text():
                 save_stock_txt_str = save_stock_txt_str + " " + self.compare_list[i]["limit"].text()
+            else:
+                save_stock_txt_str = save_stock_txt_str + " " + "0"
             if i != self.valid_compare_cnt - 1:
                 save_stock_txt_str = save_stock_txt_str + "\n"
         f = open("monitor_pool.txt", "w")
