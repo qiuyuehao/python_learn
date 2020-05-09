@@ -14,7 +14,7 @@ from edit import EditWindow
 from edit import Communicate
 from basic_function import *
 from get_weibo import send_weibo_mail_on_time
-
+import signal
 
 notify_method = "mail"
 
@@ -113,7 +113,7 @@ class MyWidgets(QWidget):
         #edit_w.setupUi(self)
         #edit_w.exec()
     def close(self):
-        os.system('(sleep 1;./qyh_stock_main_for_dfcf.py)&')
+        os.system('(sleep 2;./qyh_stock_main_for_dfcf.py)&')
         os.system('killall -9 qyh_stock_main_for_dfcf.py')
     def start_get_zs_info(self):
         #print(len(zs_list))
@@ -406,12 +406,19 @@ class MyWidgets(QWidget):
             if e.modifiers() & QtCore.Qt.ControlModifier:
                 print("ctrl + c press")
                 self.close()
+
+
+def exit_handle(signum, frame):
+    print('You choose to stop me.')
+    os.system('killall -9 qyh_stock_main_for_dfcf.py')
 if __name__=='__main__':
     app=QApplication(sys.argv)
+    signal.signal(signal.SIGINT, exit_handle)
+    signal.signal(signal.SIGTERM, exit_handle)
     w=MyWidgets()
     #edit_w = UiEditWindow()
     edit_w = MyEditWindow()
-    w.ui.pushButton_3.clicked.connect(edit_w.open)
+    #w.ui.pushButton_3.clicked.connect(edit_w.open)
     edit_w.ui.c.save_signal.connect(w.save_signal_slot)
     #w.ui.c.w_save_signal(w.save_signal_slot)
     w.show()
