@@ -1,4 +1,4 @@
-#!/usr/bin/python3.5
+#!/usr/bin/python3
 import requests
 from fake_useragent import UserAgent
 import re, os
