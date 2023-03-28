@@ -7,7 +7,7 @@ import urllib.request
 import os, re
 import datetime
 from send_mail import send_mail_to_myself
-from send_wechat_msg import send_wechat_msg_to_myself
+#from send_wechat_msg import send_wechat_msg_to_myself
 
 message_notify_already = {}
 #30分钟后可以重新通知，避免频繁通知或者只通知一次
@@ -32,7 +32,8 @@ def compare_notify(name, tmp_str, method):
     else:
         method = None
     if method == "wechat":
-        send_wechat_msg_to_myself(tmp_str)
+        pass
+        #send_wechat_msg_to_myself(tmp_str)
     elif method == "mail":
         #  pass
         send_mail_to_myself(tmp_str, "no content")
@@ -102,7 +103,8 @@ def notify_user_message(name, up_down_value, other_info, method):
     else:
         title_str = name + " 下跌了 " + str(up_down_value) + "%" + str(other_info)
     if method == "wechat":
-        send_wechat_msg_to_myself(title_str)
+        pass
+        #send_wechat_msg_to_myself(title_str)
     elif method == "mail":
         send_mail_to_myself(title_str, "no content")
     else:
