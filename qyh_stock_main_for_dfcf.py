@@ -48,7 +48,7 @@ class MyWidgets(QWidget):
         self.ui.setupUi(self)
         self.ui.restart_button.clicked.connect(self.close)
 
-        self.get_and_update_init_stock_info()
+        self.init_stock_info_from_file()
         try:
            t = threading.Thread(target=self.update_info_to_ui)
            t.start()
@@ -66,10 +66,10 @@ class MyWidgets(QWidget):
         os.system('killall -9 qyh_stock_main_for_dfcf.py')
     def update_info_to_ui(self):
         thread_list = []
-        t = threading.Thread(target=self.start_get_zs_info)
+        t = threading.Thread(target=self.polling_get_zs_info)
         #  t.start()
         thread_list.append(t)
-        t = threading.Thread(target=self.start_get_stock_info)
+        t = threading.Thread(target=self.polling_get_stock_info)
         #  t.start()
         thread_list.append(t)
         t = threading.Thread(target=self.get_compare_info)
@@ -104,7 +104,7 @@ class MyWidgets(QWidget):
     def close(self):
         os.system('(sleep 2;./qyh_stock_main_for_dfcf.py)&')
         os.system('killall -9 qyh_stock_main_for_dfcf.py')
-    def start_get_zs_info(self):
+    def polling_get_zs_info(self):
         cnt = 0
         zs_info_list = []
         with open("zs_pool.txt", "r") as f:
@@ -150,7 +150,7 @@ class MyWidgets(QWidget):
                             pass
                     zs_info_list.append(zs_stock_one_element_info)
         self.ui.update_zs_stock_info(zs_info_list)
-    def get_and_update_init_stock_info(self):
+    def init_stock_info_from_file(self):
         stock_list = []
         with open("stock_pool.txt", "r") as f:
             for number, line in enumerate(f,start=1):
@@ -165,7 +165,6 @@ class MyWidgets(QWidget):
                 stock_one_element["up_down_value"] = "unknow"
                 stock_one_element["value"] = "unknow"
                 stock_one_element["notify"] = False
-                print(line_info)
                 if len(line_info) == 5:
                     notify = line_info[1]
                     stock_one_element["limit"] = line_info[2]
@@ -291,7 +290,7 @@ class MyWidgets(QWidget):
                 stock_list.append(compare_one_element)
         self.ui.update_compare_stock_info(stock_list)
 
-    def start_get_stock_info(self):
+    def polling_get_stock_info(self):
         stock_list = []
         with open("stock_pool.txt", "r") as f:
             stock_count = 0
@@ -342,7 +341,7 @@ class MyWidgets(QWidget):
                                 pass
                             try:
                                 upper_value = float(upper_value)
-                                if (price > upper_value):
+                                if (price > upper_value) and (upper_value != 0):
                                     notify_user_message(stock_one_element["stock_name"], float_up_down, upper_value, notify_method)
                                     stock_one_element["color"] = "red"
                             except:
@@ -350,7 +349,7 @@ class MyWidgets(QWidget):
                                 pass
                             try:
                                 lower_value = float(lower_value)
-                                if (price < lower_value):
+                                if (price < lower_value) and (upper_value != 0):
                                     notify_user_message(stock_one_element["stock_name"], float_up_down, lower_value, notify_method)
                                     stock_one_element["color"] = "red"
                             except:
@@ -379,7 +378,7 @@ class MyWidgets(QWidget):
 
     def save_signal_slot(self, some_message):
         print("save signal", some_message)
-        self.get_and_update_init_stock_info()
+        self.init_stock_info_from_file()
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Escape:
             self.close()

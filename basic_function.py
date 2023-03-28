@@ -92,7 +92,7 @@ def notify_user_message(name, up_down_value, other_info, method):
     else:
         message_notify_already[name] = 0
     if message_notify_already[name] == 0:
-        print("should notify", name)
+        print("进行通知 ======> ", name)
         new_timer_thread = threading.Timer(notify_time, update_notify_value, (name,)).start()
         message_notify_already[name] = 1
     else:
