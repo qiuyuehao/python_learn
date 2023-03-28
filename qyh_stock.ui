@@ -133,7 +133,7 @@
       <height>351</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout_3">
+    <layout class="QGridLayout" name="stock_grid_layout">
      <item row="0" column="0">
       <widget class="QLabel" name="label_10">
        <property name="text">
