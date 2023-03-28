@@ -70,12 +70,12 @@ class Ui_MainWindow(object):
             self.zs_list.append(zs_ui_list_dict)
 
         self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(30, 150, 572, 351))
+        self.widget.setGeometry(QtCore.QRect(30, 30, 572, 351))
         self.widget.setObjectName("widget")
-        self.stock_grid_layout = QtWidgets.QGridLayout(self.widget)
+        self.text_grid_layout = QtWidgets.QGridLayout(self.widget)
         #self.stock_grid_layout.setContentsMargins(10, 10, 10, 10)
-        self.stock_grid_layout.setObjectName("stock_grid_layout")
-        self.stock_grid_layout.setSpacing(10)
+        self.text_grid_layout.setObjectName("stock_grid_layout")
+        self.text_grid_layout.setSpacing(10)
 
         ui_stock_name = QtWidgets.QLabel(self.widget)
         ui_up_down_value = QtWidgets.QLabel(self.widget)
@@ -93,16 +93,23 @@ class Ui_MainWindow(object):
         ui_up_limit.setText("幅度百分比")
         ui_up_value_limit.setText("价格上限")
         ui_down_value_limit.setText("价格下限")
-        self.stock_grid_layout.addWidget(ui_stock_name, 0, 0, 1, 1)
-        self.stock_grid_layout.addWidget(ui_up_down_value, 0, 1, 1, 1)
-        self.stock_grid_layout.addWidget(ui_up_down_percent, 0, 2, 1, 1)
-        self.stock_grid_layout.addWidget(ui_value, 0, 3, 1, 1)
-        self.stock_grid_layout.addWidget(ui_up_notify, 0, 4, 1, 1)
-        self.stock_grid_layout.addWidget(ui_up_limit, 0, 5, 1, 1)
-        self.stock_grid_layout.addWidget(ui_up_value_limit, 0, 6, 1, 1)
-        self.stock_grid_layout.addWidget(ui_down_value_limit, 0, 7, 1, 1)
+        self.text_grid_layout.addWidget(ui_stock_name, 0, 0, 1, 1)
+        self.text_grid_layout.addWidget(ui_up_down_value, 0, 1, 1, 1)
+        self.text_grid_layout.addWidget(ui_up_down_percent, 0, 2, 1, 1)
+        self.text_grid_layout.addWidget(ui_value, 0, 3, 1, 1)
+        self.text_grid_layout.addWidget(ui_up_notify, 0, 4, 1, 1)
+        self.text_grid_layout.addWidget(ui_up_limit, 0, 5, 1, 1)
+        self.text_grid_layout.addWidget(ui_up_value_limit, 0, 6, 1, 1)
+        self.text_grid_layout.addWidget(ui_down_value_limit, 0, 7, 1, 1)
 
-        for i in range(1, self.stock_display_per_page + 1):
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(30, 170, 572, 351))
+        self.widget.setObjectName("widget")
+        self.stock_grid_layout = QtWidgets.QGridLayout(self.widget)
+        self.stock_grid_layout.setObjectName("stock_grid_layout")
+        self.stock_grid_layout.setSpacing(10)
+
+        for i in range(0, self.stock_display_per_page + 1):
             stock_ui_list_dict = {}
             stock_ui_list_dict["stock_name"] = QtWidgets.QLabel(self.widget)
             stock_ui_list_dict["up_down_value"] = QtWidgets.QLabel(self.widget)
@@ -217,10 +224,10 @@ class Ui_MainWindow(object):
 
     def get_notify_value_by_name(self, name):
         if len(self.stock_list) != 0:
-            print("get notify of", name)
+            #print("get notify of", name)
             for i in range(0, len(self.stock_list)):
                 if name == self.stock_list[i]["stock_name"].text():
-                    print("find notify of same name", self.stock_list[i]["stock_name"].text(), self.stock_list[i]["notify"].isChecked())
+                    #print("find notify of same name", self.stock_list[i]["stock_name"].text(), self.stock_list[i]["notify"].isChecked())
                     return self.stock_list[i]["notify"].isChecked()
         return None
 

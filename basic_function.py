@@ -8,10 +8,12 @@ import os, re
 import datetime
 from send_mail import send_mail_to_myself
 from send_wechat_msg import send_wechat_msg_to_myself
+
 message_notify_already = {}
+#30分钟后可以重新通知，避免频繁通知或者只通知一次
 notify_time = 60 * 30
+
 pre_date_day = 0
-#  debug = False
 debug = True
 
 
@@ -25,7 +27,6 @@ def compare_notify(name, tmp_str, method):
     else:
         message_notify_already[name] = 0
     if message_notify_already[name] == 0:
-        #  print("should notify", name, tmp_str)
         new_timer_thread = threading.Timer(notify_time, update_notify_value, (name,)).start()
         message_notify_already[name] = 1
     else:
@@ -49,12 +50,14 @@ def update_notify_when_new_day():
         if pre_date_day != time_now:
             pre_date_day = time_now
             update_stock_notify()
+
 def update_stock_notify():
     global message_notify_already
     if len(message_notify_already) == 0:
         return
     for kv in message_notify_already:
-        message_notify_already[kv] = 1
+        message_notify_already[kv] = 0
+
 def is_deal_time_now():
     global debug
     if debug == True:
@@ -95,17 +98,16 @@ def notify_user_message(name, up_down_value, other_info, method):
     else:
         method = None
     if up_down_value > 0:
-        tmp_content = name + "good news  上涨了 " + str(up_down_value) + "   other information:" +str(other_info)
+        title_str = name + " 上涨了 " + str(up_down_value) + "%" + str(other_info)
     else:
-        tmp_content = name + "bad news 下跌了 " + str(up_down_value) + "   other information:" +str(other_info)
+        title_str = name + " 下跌了 " + str(up_down_value) + "%" + str(other_info)
     if method == "wechat":
-        send_wechat_msg_to_myself(tmp_content)
+        send_wechat_msg_to_myself(title_str)
     elif method == "mail":
-        #  pass
-        send_mail_to_myself(tmp_content, "no content")
+        send_mail_to_myself(title_str, "no content")
     else:
         pass
-        #print(tmp_content)
+        #print(title_str)
 
 def update_notify_value(message_id):
     global message_notify_already
