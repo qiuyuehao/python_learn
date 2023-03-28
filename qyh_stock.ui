@@ -27,7 +27,7 @@
      <string>start</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="restart_button">
     <property name="geometry">
      <rect>
       <x>580</x>

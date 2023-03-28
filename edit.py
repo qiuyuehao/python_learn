@@ -37,10 +37,10 @@ class EditWindow():
         #  self.pushButton.setObjectName("pushButton")
         #  self.pushButton.clicked.connect(self.open_file_all)
 
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(510, 120, 99, 27))
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.pushButton_2.clicked.connect(self.save_file_all)
+        self.restart_button = QtWidgets.QPushButton(self.centralwidget)
+        self.restart_button.setGeometry(QtCore.QRect(510, 120, 99, 27))
+        self.restart_button.setObjectName("restart_button")
+        self.restart_button.clicked.connect(self.save_file_all)
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_3.setGeometry(QtCore.QRect(510, 190, 99, 27))
         self.pushButton_3.setObjectName("pushButton_3")
@@ -148,5 +148,5 @@ class EditWindow():
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         #  self.pushButton.setText(_translate("MainWindow", "open"))
-        self.pushButton_2.setText(_translate("MainWindow", "save"))
+        self.restart_button.setText(_translate("MainWindow", "save"))
         self.pushButton_3.setText(_translate("MainWindow", "cancle"))

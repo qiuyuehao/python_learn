@@ -44,16 +44,16 @@ class MyWidgets(QWidget):
         super().__init__()
         self.ui=Ui_MainWindow()
         self.ui.setupUi(self)
-        self.ui.pushButton_2.clicked.connect(self.close)
+        self.ui.restart_button.clicked.connect(self.close)
         #  self.ui.pushButton.clicked.connect(self.start)
         #self.ui.pushButton_3.clicked.connect(self.edit)
         #  t = threading.Thread(target=self.get_and_update_init_stock_info)
         #  t.start()
-        try:
-           t = threading.Thread(target=send_weibo_mail_on_time)
-           t.start()
-        except:
-            print("init send weibo mail fail")
+        # try:
+        #    t = threading.Thread(target=send_weibo_mail_on_time)
+        #    t.start()
+        # except:
+        #     print("init send weibo mail fail")
         self.get_and_update_init_stock_info()
         try:
            t = threading.Thread(target=self.update_info_to_ui)
@@ -177,6 +177,7 @@ class MyWidgets(QWidget):
                 stock_list_dict["up_down_value"] = "unknow"
                 stock_list_dict["value"] = "unknow"
                 stock_list_dict["notify"] = False
+                print(line_info)
                 if len(line_info) == 5:
                     noitfy = line_info[1]
                     stock_list_dict["limit"] = line_info[2]
@@ -187,6 +188,7 @@ class MyWidgets(QWidget):
                             stock_list_dict["notify"] = True
                     except:
                         pass
+                print(stock_list_dict)
                 stock_list.append(stock_list_dict)
         self.ui.update_stock_info(stock_list)
         stock_list = []
